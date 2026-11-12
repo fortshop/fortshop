@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fortnite Item Shop Today — Fort</title>
+<meta name="description" content="Fort: today's Fortnite item shop, updated daily from the public Fortnite API. See every item in the Fortnite shop today with prices in V-Bucks.">
+<style>
+  :root { color-scheme: dark; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif; background: #0e0e16; color: #f2f2f7; padding: 20px 14px 40px; }
+  header { max-width: 1100px; margin: 0 auto 8px; text-align: center; }
+  header h1 { font-size: 2rem; letter-spacing: .5px; }
+  header h1 span { color: #ffd83d; }
+  header p { color: #a7a7b8; margin-top: 6px; }
+  #status { text-align: center; color: #a7a7b8; margin: 18px 0; }
+  main { max-width: 1100px; margin: 0 auto; }
+  h2.section { margin: 26px 4px 12px; font-size: 1.15rem; color: #ffd83d; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
+  .card { background: #1a1a28; border: 1px solid #2a2a3d; border-radius: 12px; overflow: hidden; text-align: center; padding-bottom: 10px; }
+  .card img { width: 100%; aspect-ratio: 1/1; object-fit: cover; background: #12121e; display: block; }
+  .card .name { font-weight: 600; font-size: .92rem; padding: 8px 6px 2px; }
+  .card .rarity { font-size: .75rem; text-transform: uppercase; letter-spacing: .6px; color: #9db2ff; }
+  .card .price { margin-top: 4px; font-weight: 700; color: #ffd83d; }
+  .card .price img { width: 16px; height: 16px; display: inline-block; vertical-align: -3px; aspect-ratio: auto; background: none; }
+  footer { max-width: 1100px; margin: 40px auto 0; text-align: center; color: #77778c; font-size: .8rem; line-height: 1.5; }
+</style>
+</head>
+<body>
+<header>
+  <h1><span>Fort</span> — Fortnite Item Shop</h1>
+  <p>Today's Fortnite shop, updated daily. Every item, every price, in one place.</p>
+</header>
+<p id="status">Loading today's shop…</p>
+<main id="shop"></main>
+<footer>
+  <p>Unofficial fan project. Not affiliated with Epic Games.</p>
+  <p>Data from the free public Fortnite API (fortnite-api.com). Prices in V-Bucks.</p>
+</footer>
+<script>
+(function () {
+  var status = document.getElementById('status');
+  var shop = document.getElementById('shop');
+  var VBUCK = 'https://fortnite-api.com/images/vbuck.png';
+
+  function entryName(e) {
+    if (e.bundle && e.bundle.name) return e.bundle.name;
+    if (e.brItems && e.brItems.length) return e.brItems[0].name;
+    if (e.tracks && e.tracks.length) return e.tracks[0].title;
+    if (e.instruments && e.instruments.length) return e.instruments[0].name;
+    if (e.cars && e.cars.length) return e.cars[0].name;
+    return (e.devName || 'Item').replace(/^\[VIRTUAL\]/, '').replace(/ for \d+ MtxCurrency$/, '');
+  }
+  function entryImage(e) {
+    if (e.bundle && e.bundle.image) return e.bundle.image;
+    if (e.newDisplayAsset && e.newDisplayAsset.renderImages && e.newDisplayAsset.renderImages.length) return e.newDisplayAsset.renderImages[0].image;
+    if (e.brItems && e.brItems.length) {
+      var im = e.brItems[0].images || {};
+      return im.featured || im.icon || im.smallIcon;
+    }
+    if (e.tracks && e.tracks.length) return e.tracks[0].albumArt;
+    if (e.instruments && e.instruments.length) {
+      var ii = e.instruments[0].images || {};
+      return ii.large || ii.small;
+    }
+    if (e.cars && e.cars.length) {
+      var ci = e.cars[0].images || {};
+      return ci.large || ci.small;
+    }
+    return '';
+  }
+  function entryRarity(e) {
+    if (e.brItems && e.brItems.length && e.brItems[0].rarity) return e.brItems[0].rarity.displayValue;
+    if (e.tracks && e.tracks.length) return 'Jam Track';
+    if (e.instruments && e.instruments.length && e.instruments[0].rarity) return e.instruments[0].rarity.displayValue;
+    if (e.cars && e.cars.length && e.cars[0].rarity) return e.cars[0].rarity.displayValue;
+    return '';
+  }
+
+  fetch('https://fortnite-api.com/v2/shop')
+    .then(function (r) { return r.json(); })
+    .then(function (json) {
+      var entries = (json.data && json.data.entries) || [];
+      var date = (json.data && json.data.date) ? json.data.date.slice(0, 10) : '';
+      status.textContent = entries.length + ' offers in the shop' + (date ? ' — ' + date : '') + '.';
+
+      var groups = {};
+      var order = [];
+      entries.forEach(function (e) {
+        var g = (e.layout && e.layout.name) || 'Shop';
+        if (!groups[g]) { groups[g] = []; order.push(g); }
+        groups[g].push(e);
+      });
+
+      order.forEach(function (g) {
+        var h = document.createElement('h2');
+        h.className = 'section';
+        h.textContent = g;
+        shop.appendChild(h);
+        var grid = document.createElement('div');
+        grid.className = 'grid';
+        groups[g].forEach(function (e) {
+          var card = document.createElement('div');
+          card.className = 'card';
+          var img = entryImage(e);
+          var name = entryName(e);
+          var rarity = entryRarity(e);
+          var price = (typeof e.finalPrice === 'number') ? e.finalPrice : '';
+          card.innerHTML =
+            (img ? '<img loading="lazy" alt="">' : '') +
+            '<div class="name"></div>' +
+            (rarity ? '<div class="rarity"></div>' : '') +
+            (price !== '' ? '<div class="price"><img alt="V-Bucks"> <span></span></div>' : '');
+          if (img) card.querySelector('img').src = img;
+          card.querySelector('.name').textContent = name;
+          var rEl = card.querySelector('.rarity');
+          if (rEl) rEl.textContent = rarity;
+          var pEl = card.querySelector('.price span');
+          if (pEl) pEl.textContent = price.toLocaleString();
+          var vb = card.querySelector('.price img');
+          if (vb) vb.src = VBUCK;
+          grid.appendChild(card);
+        });
+        shop.appendChild(grid);
+      });
+    })
+    .catch(function () {
+      status.textContent = 'Could not load today\'s shop right now — please refresh in a minute.';
+    });
+})();
+</script>
+</body>
+</html>
