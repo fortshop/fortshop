@@ -428,6 +428,14 @@ nav{position:sticky;top:0;z-index:55;background:rgba(8,12,38,.94);backdrop-filte
     .toolbar{position:sticky;top:0;z-index:40;padding:8px 4px;background:rgba(8,12,38,.97);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
   }
 </style>
+
+<style>
+/* ===== Missing-art placeholder: flat tile, Hex F mark + item name ===== */
+.ph-tile{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;width:100%;height:100%;padding:14px;text-align:center}
+.ph-name{font-size:13px;font-weight:600;color:var(--text-dim);line-height:1.3;overflow-wrap:break-word}
+.card-img img.ph-mark{width:46px;height:46px;object-fit:contain}
+.detail-img img.ph-mark{width:64px;height:64px;object-fit:contain}
+</style>
 </head>
 <body>
 
@@ -507,6 +515,21 @@ nav{position:sticky;top:0;z-index:55;background:rgba(8,12,38,.94);backdrop-filte
       .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")
       .replace(/"/g,"&quot;").replace(/'/g,"&#39;");
   }
+  /* Branded placeholder for items the API ships with no artwork at
+     all: a flat tile with the Hex F mark and the item name — never a
+     broken-image icon or an empty box. fsImgErr is wired to the inline
+     onerror of every card/detail image. */
+  function fsPlaceholder(name){
+    return '<div class="ph-tile"><img class="ph-mark" src="assets/favicon.svg" alt="" aria-hidden="true">'
+      + '<span class="ph-name">' + esc(name || "FortShop") + "</span></div>";
+  }
+  function fsImgErr(img){
+    var alt = img.getAttribute("alt") || "";
+    var name = alt.split(" \u2014 ")[0].split(" \u00b7 ")[0] || "FortShop";
+    if (img.parentNode) img.parentNode.innerHTML = fsPlaceholder(name);
+  }
+  window.fsImgErr = fsImgErr;
+  window.fsPlaceholder = fsPlaceholder;
   function fetchData(name){
     return fetch("./data/" + name).then(function(r){
       if (!r.ok) throw new Error("Data returned " + r.status);
@@ -744,8 +767,8 @@ nav{position:sticky;top:0;z-index:55;background:rgba(8,12,38,.94);backdrop-filte
     var html = '<div class="detail-head">'
       + '<div class="detail-img" style="background:radial-gradient(circle at 50% 35%,' + color + '38,rgba(5,8,26,.6))">'
       + (rec.img
-          ? '<img src="' + esc(rec.img) + '" alt="' + esc(rec.name) + (rec.type ? " — Fortnite " + esc(rec.type) : "") + (rec.rarityLabel ? " · " + esc(rec.rarityLabel) : "") + '" onerror="this.parentNode.innerHTML=\'<span class=&quot;no-img&quot;>Image unavailable</span>\'">'
-          : '<span class="no-img">Image unavailable</span>')
+          ? '<img src="' + esc(rec.img) + '" alt="' + esc(rec.name) + (rec.type ? " — Fortnite " + esc(rec.type) : "") + (rec.rarityLabel ? " · " + esc(rec.rarityLabel) : "") + '" onerror="fsImgErr(this)">'
+          : fsPlaceholder(rec.name))
       + "</div>"
       + '<div class="detail-info">'
       + '<div class="detail-name">' + esc(rec.name) + "</div>"
@@ -833,8 +856,8 @@ nav{position:sticky;top:0;z-index:55;background:rgba(8,12,38,.94);backdrop-filte
           + wishBtnHTML(it.id)
           + '<div class="card-img" style="background:radial-gradient(circle at 50% 35%,' + color + '38,rgba(5,8,26,.6))">'
           + (it.image
-              ? '<img src="' + esc(it.image) + '" alt="' + esc(it.name) + (it.type ? " — Fortnite " + esc(it.type) : "") + (it.rarity ? " · " + esc(it.rarity) : "") + '" loading="lazy" onerror="this.parentNode.innerHTML=\'<span class=&quot;no-img&quot;>Image unavailable</span>\'">'
-              : '<span class="no-img">Image unavailable</span>')
+              ? '<img src="' + esc(it.image) + '" alt="' + esc(it.name) + (it.type ? " — Fortnite " + esc(it.type) : "") + (it.rarity ? " · " + esc(it.rarity) : "") + '" loading="lazy" onerror="fsImgErr(this)">'
+              : fsPlaceholder(it.name))
           + '</div>'
           + '<div class="rarity-bar" style="background:' + color + '"></div>'
           + '<div class="card-body">'
