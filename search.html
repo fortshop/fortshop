@@ -119,6 +119,8 @@
   .b-hot{background:#ff6a3d;color:#2b0e02}
   .b-debut{background:#2ad4c4;color:#04302b}
   .b-overdue{background:#9d4dff;color:#ffffff}
+  .b-battlepass{background:#6c3df4;color:#ffffff}
+  .b-bundle{background:#e8ecf8;color:#1a2350}
   .b-back{background:#2fb9ff;color:#06283d}
   .badges{display:flex;flex-wrap:wrap;gap:5px}
   .page-title{
@@ -533,6 +535,8 @@ nav{position:sticky;top:0;z-index:55;background:rgba(8,12,38,.94);backdrop-filte
   <span class="cat"><span class="badge b-hot">&#128293; Hot Return</span><span class="cat-def">Back in the shop after 60+ days away</span></span>
   <span class="cat"><span class="badge b-debut">&#10024; Debut</span><span class="cat-def">Added to the game within the last 45 days</span></span>
   <span class="cat"><span class="badge b-overdue">&#9203; Overdue</span><span class="cat-def">Due back by our return predictions</span></span>
+  <span class="cat"><span class="badge b-battlepass">&#127903; Battle Pass</span><span class="cat-def">From a season&rsquo;s Battle Pass</span></span>
+  <span class="cat"><span class="badge b-bundle">&#127873; Bundle</span><span class="cat-def">From a pack or bundle</span></span>
   </div>
 </details>
 
@@ -598,10 +602,12 @@ nav{position:sticky;top:0;z-index:55;background:rgba(8,12,38,.94);backdrop-filte
     crowned:["\u{1F451}","Crowned","b-crowned"],
     hot:["\u{1F525}","Hot Return","b-hot"],
     debut:["\u2728","Debut","b-debut"],
-    overdue:["\u23F3","Overdue","b-overdue"]
+    overdue:["\u23F3","Overdue","b-overdue"],
+    battlepass:["\u{1F39F}\uFE0F","Battle Pass","b-battlepass"],
+    bundle:["\u{1F381}","Bundle","b-bundle"]
   };
-  var BADGE_ORDER = ["crowned","hot","debut","overdue"];
-  var badgeData = { badges:{}, backAfter:{} };
+  var BADGE_ORDER = ["crowned","hot","debut","overdue","battlepass","bundle"];
+  var badgeData = { badges:{}, backAfter:{}, sources:{} };
   var detailIndex = null;
 
   function esc(s){
@@ -670,11 +676,11 @@ nav{position:sticky;top:0;z-index:55;background:rgba(8,12,38,.94);backdrop-filte
   }
     function loadBadges(){
     return fetchData("badges.json").then(function(d){
-      badgeData = { badges: d.badges || {}, backAfter: d.backAfter || {} };
+      badgeData = { badges: d.badges || {}, backAfter: d.backAfter || {}, sources: d.sources || {} };
     }).catch(function(){ /* badges are decorative; render without them */ });
   }
   /* Decluttered chips: cards show at most ONE category badge (priority
-     Crowned > Hot Return > Debut > Overdue, the BADGE_ORDER) and the
+     Crowned > Hot Return > Debut > Overdue > Battle Pass > Bundle, the BADGE_ORDER) and the
      "Back after" chip only for absences of 30+ days. The detail view
      passes full = true and shows every badge. */
   function chipsHTML(id, withBack, full){
@@ -891,6 +897,8 @@ nav{position:sticky;top:0;z-index:55;background:rgba(8,12,38,.94);backdrop-filte
       + '<div class="detail-meta">'
       + (rec.set ? "<div><b>Set:</b> " + esc(rec.set) + "</div>" : "")
       + (rec.intro ? "<div><b>Introduced:</b> " + esc(rec.intro.replace(/^Introduced in /i, "")) + "</div>" : "")
+      + (badgeData.sources && badgeData.sources[rec.id] && badgeData.sources[rec.id].source === "battlepass" ? "<div><b>Battle Pass:</b> Chapter " + esc(badgeData.sources[rec.id].chapter) + ", Season " + esc(badgeData.sources[rec.id].season) + "</div>" : "")
+      + (badgeData.sources && badgeData.sources[rec.id] && badgeData.sources[rec.id].source === "bundle" ? "<div><b>Bundle:</b> " + esc(badgeData.sources[rec.id].pack || "Pack") + "</div>" : "")
       + (rec.added ? "<div><b>Added to the game:</b> " + esc(fmtDate(rec.added)) + "</div>" : "")
       + (rec.ls ? "<div><b>Last seen in shop:</b> " + esc(fmtDate(rec.ls)) + "</div>" : "")
       + (rec.er ? "<div><b>Expected return:</b> ~" + esc(fmtDate(rec.er)) + " (estimate)</div>" : "")
