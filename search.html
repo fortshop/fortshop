@@ -492,6 +492,14 @@ nav a{min-height:44px;display:inline-flex;align-items:center}
   .cat{display:flex;margin-top:8px}
 }
 nav{position:sticky;top:0;z-index:55;background:rgba(8,12,38,.94);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+  /* ===== Mobile pass: bottom tab bar + sticky search (phones) ===== */
+  @media (max-width:640px){
+    nav{position:fixed;top:auto;bottom:0;left:0;right:0;z-index:70;flex-wrap:nowrap;justify-content:space-around;gap:0;padding:6px 4px calc(6px + env(safe-area-inset-bottom));background:rgba(8,12,38,.97);border-top:1px solid var(--panel-border)}
+    nav a{flex:1 1 0;justify-content:center;text-align:center;white-space:nowrap;padding:9px 0;font-size:10px;letter-spacing:0;border-color:transparent;border-radius:10px}
+    nav a.active{border-color:var(--accent-blue)}
+    body{padding-bottom:76px}
+    .toolbar{position:sticky;top:0;z-index:40;padding:8px 4px;background:rgba(8,12,38,.97);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+  }
 </style>
 </head>
 <body>
@@ -1131,6 +1139,40 @@ nav{position:sticky;top:0;z-index:55;background:rgba(8,12,38,.94);backdrop-filte
     buildChips(counts);
     render();
   });
+})();
+</script>
+
+<script>
+/* Mobile: swipe down on the item detail sheet to close it. */
+(function(){
+  var overlay = document.getElementById("detailOverlay");
+  if (!overlay) return;
+  var panel = overlay.querySelector(".detail");
+  var startY = 0, dy = 0, tracking = false;
+  overlay.addEventListener("touchstart", function(e){
+    if (overlay.hidden || e.touches.length !== 1) { tracking = false; return; }
+    if (overlay.scrollTop <= 0) { startY = e.touches[0].clientY; dy = 0; tracking = true; }
+    else tracking = false;
+  }, {passive: true});
+  overlay.addEventListener("touchmove", function(e){
+    if (!tracking) return;
+    dy = e.touches[0].clientY - startY;
+    if (dy > 0 && panel) panel.style.transform = "translateY(" + Math.min(dy, 220) + "px)";
+  }, {passive: true});
+  function endSwipe(){
+    if (!tracking) return;
+    tracking = false;
+    if (panel) panel.style.transform = "";
+    if (dy > 90) {
+      overlay.hidden = true;
+      var c = document.getElementById("detailContent");
+      if (c) c.innerHTML = "";
+      document.body.style.overflow = "";
+    }
+    dy = 0;
+  }
+  overlay.addEventListener("touchend", endSwipe);
+  overlay.addEventListener("touchcancel", endSwipe);
 })();
 </script>
 </body>
