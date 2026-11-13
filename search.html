@@ -464,6 +464,15 @@
       });
     });
   }
+  var SEARCH_INDEX_PARTS = ["search-index.json", "search-index-b.json", "search-index-c.json"];
+  function loadSearchIndex(){
+    return Promise.all(SEARCH_INDEX_PARTS.map(function(n){ return fetchData(n); }))
+      .then(function(parts){
+        var items = [];
+        parts.forEach(function(p){ items = items.concat(p.items || []); });
+        return { items: items };
+      });
+  }
   function loadBadges(){
     return fetchData("badges.json").then(function(d){
       badgeData = { badges: d.badges || {}, backAfter: d.backAfter || {} };
@@ -495,7 +504,7 @@
       window.__searchItems.forEach(function(e){ detailIndex.set(e.i, e); });
       return Promise.resolve(detailIndex);
     }
-    return fetchData("search-index.json").then(function(d){
+    return loadSearchIndex().then(function(d){
       detailIndex = new Map();
       (d.items || []).forEach(function(e){ detailIndex.set(e.i, e); });
       return detailIndex;
@@ -738,7 +747,7 @@
     if (entry) openDetail(entryToRecord(entry));
   });
 
-  Promise.all([ fetchData("search-index.json"), loadBadges() ])
+  Promise.all([ loadSearchIndex(), loadBadges() ])
     .then(function(res){
       var data = res[0];
       items = data.items || [];
