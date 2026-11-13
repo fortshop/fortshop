@@ -3,8 +3,30 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Fort — Fortnite Item Shop Return Predictions</title>
+<!-- ===== SEO & SITE URLS · DOMAIN SWAP: FortShop will move to an official domain later.
+     Every sportstalk24.com URL for this page lives in the block below (title / meta /
+     canonical / Open Graph / JSON-LD), plus sitemap.xml and robots.txt — one
+     find-and-replace of "sportstalk24.com" per file when the day comes. ===== -->
+<title>Fortnite Item Shop Predictions — What Skin Is Coming Back Next? | FortShop</title>
+<meta name="description" content="Fortnite item shop predictions based on real shop history: the skins and cosmetics most overdue to return, so you know what might be in the Fortnite item shop tomorrow and what to save your V-Bucks for.">
+<meta name="keywords" content="fortnite item shop predictions, fortnite shop predictions, what is coming back to fortnite, fortnite item shop tomorrow, when will skins return to fortnite, overdue fortnite skins, fortnite shop leaks and predictions">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://sportstalk24.com/predictions.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="FortShop">
+<meta property="og:title" content="Fortnite Item Shop Predictions — What Skin Is Coming Back Next? | FortShop">
+<meta property="og:description" content="Fortnite item shop predictions based on real shop history: the skins and cosmetics most overdue to return, so you know what might be in the Fortnite item shop tomorrow and what to save your V-Bucks for.">
+<meta property="og:url" content="https://sportstalk24.com/predictions.html">
+<meta property="og:image" content="https://sportstalk24.com/assets/favicon.svg">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Fortnite Item Shop Predictions — What Skin Is Coming Back Next? | FortShop">
+<meta name="twitter:description" content="Fortnite item shop predictions based on real shop history: the skins and cosmetics most overdue to return, so you know what might be in the Fortnite item shop tomorrow and what to save your V-Bucks for.">
+<meta name="twitter:image" content="https://sportstalk24.com/assets/favicon.svg">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"Fortnite Item Shop Predictions","url":"https://sportstalk24.com/predictions.html","isPartOf":{"@type":"WebSite","name":"FortShop","url":"https://sportstalk24.com/"}}</script>
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+<meta name="theme-color" content="#0b2a6b">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <style>
   :root{
     --bg-deep:#0d1440;
@@ -377,6 +399,27 @@
   .stat small{display:block;font-size:12px;font-weight:600;color:var(--text-dim);margin-top:2px;line-height:1.5}
 
 </style>
+
+<style>
+/* ===== FortShop mobile pass · Nov 13, 2026: tap targets, 2-up grid,
+   sticky bar, no iOS input zoom, no horizontal overflow ===== */
+html,body{overflow-x:hidden}
+img{max-width:100%}
+nav a{min-height:44px;display:inline-flex;align-items:center}
+.wish-toggle{min-height:44px}
+.chip{min-height:44px;display:inline-flex;align-items:center}
+@media (max-width:920px){
+  select,input{font-size:16px}
+}
+@media (max-width:520px){
+  .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .card{min-width:0}
+  .card-name{overflow-wrap:break-word}
+  .wish-btn{width:44px;height:44px;font-size:19px}
+  .cat{display:flex;margin-top:8px}
+}
+nav{position:sticky;top:0;z-index:55;background:rgba(8,12,38,.94);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+</style>
 </head>
 <body>
 
@@ -391,6 +434,7 @@
   <a href="predictions.html" class="active">Predictions</a>
   <a href="search.html">Search</a>
   <a href="wishlist.html">Wishlist<span class="nav-count" id="wishCount" hidden></span></a>
+  <a href="alerts.html">Alerts</a>
 </nav>
 
 <details class="categories" id="catLegend" aria-label="FortShop categories">
@@ -403,12 +447,12 @@
   </div>
 </details>
 
-<h1 class="page-title">Return Predictions</h1>
+<h1 class="page-title">Fortnite Item Shop Predictions</h1>
 <p class="intro"><strong>Predictions, not guarantees.</strong> These cosmetics have been away longer than
   their own usual return gap, based on their tracked Item Shop return history. The score
   compares days away now with each item&rsquo;s average time between returns &mdash;
   a higher score means more overdue <em>for that item</em>. Epic doesn&rsquo;t publish a
-  return schedule, so treat this as pattern-watching, not a promise.</p>
+  return schedule, so treat this as pattern-watching, not a promise. If you&rsquo;re asking &ldquo;when is this skin coming back to Fortnite?&rdquo;, start with the most overdue items below &mdash; these Fortnite shop predictions update with every rotation.</p>
 
 <main id="content">
   <div class="status" id="status">Loading&hellip;</div>
@@ -419,6 +463,7 @@
   <div class="credit">Shop &amp; cosmetics data and item images: <a href="https://fortnite-api.com" target="_blank" rel="noopener">fortnite-api.com</a> (free public API) &middot; Shop appearance history (May&ndash;Nov 2026): public datamining record of the same API</div>
   <div class="credit">Showcase videos: Gnejs Gaming (YouTube)</div>
   <div class="credit">Fortnite and all item artwork &copy; Epic Games, Inc.</div>
+  <div class="credit">FortShop predicts the Fortnite item shop from real appearance history: the most overdue skins and cosmetics, ranked by how long they usually stay away — your guide to what’s coming back to the Fortnite shop.</div>
 </footer>
 
 <div class="overlay" id="detailOverlay" hidden>
@@ -474,9 +519,33 @@
         var items = [];
         parts.forEach(function(p){ items = items.concat(p.items || []); });
         return { items: items };
-      });
+      })
+      .then(function(out){ return mergeReturns(out); });
   }
-  function loadBadges(){
+  /* Expected-return data (data/returns.json, regenerated daily): fills the
+     last-seen / expected-return gaps the baked index leaves — notably
+     type-median estimates for items with a single tracked shop stint. */
+  var returnsCache = null;
+  function loadReturns(){
+    if (!returnsCache){
+      returnsCache = fetchData("returns.json").catch(function(){ return null; });
+    }
+    return returnsCache;
+  }
+  function mergeReturns(out){
+    return loadReturns().then(function(doc){
+      if (doc && doc.items){
+        (out.items || []).forEach(function(it){
+          var rec = doc.items[it.i];
+          if (!rec) return;
+          if (!it.ls) it.ls = rec.lastSeen || "";
+          if (!it.er) it.er = rec.expected || "";
+        });
+      }
+      return out;
+    }).catch(function(){ return out; });
+  }
+    function loadBadges(){
     return fetchData("badges.json").then(function(d){
       badgeData = { badges: d.badges || {}, backAfter: d.backAfter || {} };
     }).catch(function(){ /* badges are decorative; render without them */ });
@@ -634,6 +703,7 @@
       img: e.img || "", feat: e.feat || "",
       v: e.v || null, sv: e.sv || "", set: e.st || "",
       intro: e.intro || "", desc: e.desc || "", added: e.added || "",
+      ls: e.ls || "", er: e.er || "",
       price: fallback && fallback.price, was: fallback && fallback.was
     };
   }
@@ -668,7 +738,7 @@
     var html = '<div class="detail-head">'
       + '<div class="detail-img" style="background:radial-gradient(circle at 50% 35%,' + color + '38,rgba(5,8,26,.6))">'
       + (rec.img
-          ? '<img src="' + esc(rec.img) + '" alt="' + esc(rec.name) + '" onerror="this.parentNode.innerHTML=\'<span class=&quot;no-img&quot;>Image unavailable</span>\'">'
+          ? '<img src="' + esc(rec.img) + '" alt="' + esc(rec.name) + (rec.type ? " — Fortnite " + esc(rec.type) : "") + (rec.rarityLabel ? " · " + esc(rec.rarityLabel) : "") + '" onerror="this.parentNode.innerHTML=\'<span class=&quot;no-img&quot;>Image unavailable</span>\'">'
           : '<span class="no-img">Image unavailable</span>')
       + "</div>"
       + '<div class="detail-info">'
@@ -688,6 +758,9 @@
       + (rec.set ? "<div><b>Set:</b> " + esc(rec.set) + "</div>" : "")
       + (rec.intro ? "<div><b>Introduced:</b> " + esc(rec.intro.replace(/^Introduced in /i, "")) + "</div>" : "")
       + (rec.added ? "<div><b>Added to the game:</b> " + esc(fmtDate(rec.added)) + "</div>" : "")
+      + (rec.ls ? "<div><b>Last seen in shop:</b> " + esc(fmtDate(rec.ls)) + "</div>" : "")
+      + (rec.er ? "<div><b>Expected return:</b> ~" + esc(fmtDate(rec.er)) + " (estimate)</div>" : "")
+      + (!rec.ls ? "<div><b>Shop history:</b> Not seen in the shop in our tracked records (May 2 &ndash; Nov 12, 2026)</div>" : "")
       + "</div>"
       + "</div></div>";
     if (rec.v && rec.v.length){
@@ -754,7 +827,7 @@
           + wishBtnHTML(it.id)
           + '<div class="card-img" style="background:radial-gradient(circle at 50% 35%,' + color + '38,rgba(5,8,26,.6))">'
           + (it.image
-              ? '<img src="' + esc(it.image) + '" alt="' + esc(it.name) + '" loading="lazy" onerror="this.parentNode.innerHTML=\'<span class=&quot;no-img&quot;>Image unavailable</span>\'">'
+              ? '<img src="' + esc(it.image) + '" alt="' + esc(it.name) + (it.type ? " — Fortnite " + esc(it.type) : "") + (it.rarity ? " · " + esc(it.rarity) : "") + '" loading="lazy" onerror="this.parentNode.innerHTML=\'<span class=&quot;no-img&quot;>Image unavailable</span>\'">'
               : '<span class="no-img">Image unavailable</span>')
           + '</div>'
           + '<div class="rarity-bar" style="background:' + color + '"></div>'

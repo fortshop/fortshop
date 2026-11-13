@@ -3,8 +3,30 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Fort — Search the Fortnite Item Shop Catalogue</title>
+<!-- ===== SEO & SITE URLS · DOMAIN SWAP: FortShop will move to an official domain later.
+     Every sportstalk24.com URL for this page lives in the block below (title / meta /
+     canonical / Open Graph / JSON-LD), plus sitemap.xml and robots.txt — one
+     find-and-replace of "sportstalk24.com" per file when the day comes. ===== -->
+<title>Search All Fortnite Cosmetics — Skins, Emotes, Wraps &amp; More | FortShop</title>
+<meta name="description" content="Search the full Fortnite cosmetics catalogue: every skin, back bling, pickaxe, glider, emote and wrap. View editable styles and showcase videos, check shop history, and find out when a skin is coming back to the Fortnite item shop.">
+<meta name="keywords" content="fortnite cosmetics search, fortnite skins list, all fortnite skins, when is a skin coming back to fortnite, fortnite item shop search, fortnite wraps list, fortnite emotes list, fortnite pickaxes, fortnite skin finder">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://sportstalk24.com/search.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="FortShop">
+<meta property="og:title" content="Search All Fortnite Cosmetics — Skins, Emotes, Wraps &amp; More | FortShop">
+<meta property="og:description" content="Search the full Fortnite cosmetics catalogue: every skin, back bling, pickaxe, glider, emote and wrap. View editable styles and showcase videos, check shop history, and find out when a skin is coming back to the Fortnite item shop.">
+<meta property="og:url" content="https://sportstalk24.com/search.html">
+<meta property="og:image" content="https://sportstalk24.com/assets/favicon.svg">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Search All Fortnite Cosmetics — Skins, Emotes, Wraps &amp; More | FortShop">
+<meta name="twitter:description" content="Search the full Fortnite cosmetics catalogue: every skin, back bling, pickaxe, glider, emote and wrap. View editable styles and showcase videos, check shop history, and find out when a skin is coming back to the Fortnite item shop.">
+<meta name="twitter:image" content="https://sportstalk24.com/assets/favicon.svg">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"Fortnite Cosmetics Search","url":"https://sportstalk24.com/search.html","isPartOf":{"@type":"WebSite","name":"FortShop","url":"https://sportstalk24.com/"}}</script>
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+<meta name="theme-color" content="#0b2a6b">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <style>
   :root{
     --bg-deep:#0d1440;
@@ -148,6 +170,8 @@
   .rarity-bar{height:5px;flex:none}
   .card-body{padding:12px 14px 14px;display:flex;flex-direction:column;gap:6px;flex:1}
   .card-name{font-size:15px;font-weight:700;line-height:1.25}
+  .history-line{font-size:12px;color:var(--text-dim);margin-top:6px}
+  .history-line.in-shop-now{color:#37e0a0;font-weight:700}
   .card-type{font-size:12px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.08em}
   .rarity{
     align-self:flex-start;
@@ -448,6 +472,27 @@
     color:var(--text-dim);
   }
 </style>
+
+<style>
+/* ===== FortShop mobile pass · Nov 13, 2026: tap targets, 2-up grid,
+   sticky bar, no iOS input zoom, no horizontal overflow ===== */
+html,body{overflow-x:hidden}
+img{max-width:100%}
+nav a{min-height:44px;display:inline-flex;align-items:center}
+.wish-toggle{min-height:44px}
+.chip{min-height:44px;display:inline-flex;align-items:center}
+@media (max-width:920px){
+  select,input{font-size:16px}
+}
+@media (max-width:520px){
+  .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .card{min-width:0}
+  .card-name{overflow-wrap:break-word}
+  .wish-btn{width:44px;height:44px;font-size:19px}
+  .cat{display:flex;margin-top:8px}
+}
+nav{position:sticky;top:0;z-index:55;background:rgba(8,12,38,.94);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+</style>
 </head>
 <body>
 
@@ -462,6 +507,7 @@
   <a href="predictions.html">Predictions</a>
   <a href="search.html" class="active">Search</a>
   <a href="wishlist.html">Wishlist<span class="nav-count" id="wishCount" hidden></span></a>
+  <a href="alerts.html">Alerts</a>
 </nav>
 
 <details class="categories" id="catLegend" aria-label="FortShop categories">
@@ -474,11 +520,13 @@
   </div>
 </details>
 
-<h1 class="page-title">Search the Catalogue</h1>
+<h1 class="page-title">Search All Fortnite Cosmetics</h1>
 <p class="intro">
-  Every Fortnite cosmetic in one place &mdash; search outfits, emotes, pickaxes,
+  Every Fortnite cosmetic in one place &mdash; search more than 16,800 outfits, emotes, pickaxes,
   gliders, wraps and more by name, then narrow things down by type and rarity.
-  Tap any item for its styles, showcase and details.
+  Each result shows when the item was <strong>last seen in the Fortnite item shop</strong> and when it is
+  <strong>expected to return</strong>. Tap any item for its styles, showcase and details.
+  Shop history is tracked from May 2, 2026; expected returns are estimates based on each item&rsquo;s usual return gap.
 </p>
 
 <div class="toolbar">
@@ -506,6 +554,7 @@
   <div class="credit">Shop &amp; cosmetics data and item images: <a href="https://fortnite-api.com" target="_blank" rel="noopener">fortnite-api.com</a> (free public API) &middot; Shop appearance history (May&ndash;Nov 2026): public datamining record of the same API</div>
   <div class="credit">Showcase videos: Gnejs Gaming (YouTube)</div>
   <div class="credit">Fortnite and all item artwork &copy; Epic Games, Inc.</div>
+  <div class="credit">Search the complete Fortnite cosmetics catalogue on FortShop — every skin, emote, wrap and pickaxe ever released — with shop history, rarity and return predictions from our Fortnite item shop tracker.</div>
 </footer>
 
 <div class="overlay" id="detailOverlay" hidden>
@@ -561,9 +610,33 @@
         var items = [];
         parts.forEach(function(p){ items = items.concat(p.items || []); });
         return { items: items };
-      });
+      })
+      .then(function(out){ return mergeReturns(out); });
   }
-  function loadBadges(){
+  /* Expected-return data (data/returns.json, regenerated daily): fills the
+     last-seen / expected-return gaps the baked index leaves — notably
+     type-median estimates for items with a single tracked shop stint. */
+  var returnsCache = null;
+  function loadReturns(){
+    if (!returnsCache){
+      returnsCache = fetchData("returns.json").catch(function(){ return null; });
+    }
+    return returnsCache;
+  }
+  function mergeReturns(out){
+    return loadReturns().then(function(doc){
+      if (doc && doc.items){
+        (out.items || []).forEach(function(it){
+          var rec = doc.items[it.i];
+          if (!rec) return;
+          if (!it.ls) it.ls = rec.lastSeen || "";
+          if (!it.er) it.er = rec.expected || "";
+        });
+      }
+      return out;
+    }).catch(function(){ return out; });
+  }
+    function loadBadges(){
     return fetchData("badges.json").then(function(d){
       badgeData = { badges: d.badges || {}, backAfter: d.backAfter || {} };
     }).catch(function(){ /* badges are decorative; render without them */ });
@@ -695,6 +768,17 @@
       return set;
     }).catch(function(){ return null; });
   }
+  function historyLineHTML(it){
+    if (shopIdCache && shopIdCache.has(it.i)){
+      return '<div class="history-line in-shop-now">In shop today</div>';
+    }
+    if (it.ls){
+      var s = '<div class="history-line">Last seen ' + esc(fmtDate(it.ls));
+      if (it.er) s += ' &middot; Expected ~' + esc(fmtDate(it.er)) + ' &middot; estimate';
+      return s + "</div>";
+    }
+    return '<div class="history-line">Not seen in the shop in our records</div>';
+  }
   function fmtDate(iso){
     if (!iso) return "";
     var d = new Date(iso + "T00:00:00Z");
@@ -721,6 +805,7 @@
       img: e.img || "", feat: e.feat || "",
       v: e.v || null, sv: e.sv || "", set: e.st || "",
       intro: e.intro || "", desc: e.desc || "", added: e.added || "",
+      ls: e.ls || "", er: e.er || "",
       price: fallback && fallback.price, was: fallback && fallback.was
     };
   }
@@ -755,7 +840,7 @@
     var html = '<div class="detail-head">'
       + '<div class="detail-img" style="background:radial-gradient(circle at 50% 35%,' + color + '38,rgba(5,8,26,.6))">'
       + (rec.img
-          ? '<img src="' + esc(rec.img) + '" alt="' + esc(rec.name) + '" onerror="this.parentNode.innerHTML=\'<span class=&quot;no-img&quot;>Image unavailable</span>\'">'
+          ? '<img src="' + esc(rec.img) + '" alt="' + esc(rec.name) + (rec.type ? " — Fortnite " + esc(rec.type) : "") + (rec.rarityLabel ? " · " + esc(rec.rarityLabel) : "") + '" onerror="this.parentNode.innerHTML=\'<span class=&quot;no-img&quot;>Image unavailable</span>\'">'
           : '<span class="no-img">Image unavailable</span>')
       + "</div>"
       + '<div class="detail-info">'
@@ -775,6 +860,9 @@
       + (rec.set ? "<div><b>Set:</b> " + esc(rec.set) + "</div>" : "")
       + (rec.intro ? "<div><b>Introduced:</b> " + esc(rec.intro.replace(/^Introduced in /i, "")) + "</div>" : "")
       + (rec.added ? "<div><b>Added to the game:</b> " + esc(fmtDate(rec.added)) + "</div>" : "")
+      + (rec.ls ? "<div><b>Last seen in shop:</b> " + esc(fmtDate(rec.ls)) + "</div>" : "")
+      + (rec.er ? "<div><b>Expected return:</b> ~" + esc(fmtDate(rec.er)) + " (estimate)</div>" : "")
+      + (!rec.ls ? "<div><b>Shop history:</b> Not seen in the shop in our tracked records (May 2 &ndash; Nov 12, 2026)</div>" : "")
       + "</div>"
       + "</div></div>";
     if (rec.v && rec.v.length){
@@ -982,7 +1070,7 @@
           + wishBtnHTML(it.i)
           + '<div class="card-img" style="background:radial-gradient(circle at 50% 35%,' + icolor + '38,rgba(5,8,26,.6))">'
           + (it.img
-              ? '<img src="' + esc(it.img) + '" alt="' + esc(it.n.trim()) + '" loading="lazy" onerror="this.parentNode.innerHTML=\'<span class=&quot;no-img&quot;>Image unavailable</span>\'">'
+              ? '<img src="' + esc(it.img) + '" alt="' + esc(it.n.trim()) + (it.td ? " — Fortnite " + esc(it.td) : "") + (it.rd ? " · " + esc(it.rd) : "") + '" loading="lazy" onerror="this.parentNode.innerHTML=\'<span class=&quot;no-img&quot;>Image unavailable</span>\'">'
               : '<span class="no-img">Image unavailable</span>')
           + '</div>'
           + '<div class="rarity-bar" style="background:' + icolor + '"></div>'
@@ -991,6 +1079,7 @@
           + (it.td ? '<div class="card-type">' + esc(it.td) + '</div>' : '')
           + (it.rd ? '<span class="rarity" style="background:' + icolor + '">' + esc(it.rd) + '</span>' : '')
           + chipsHTML(it.i, false)
+          + historyLineHTML(it)
           + '</div></article>';
       });
       html += "</div>";
@@ -1005,7 +1094,7 @@
     var entry = itemById[card.getAttribute("data-did")];
     if (entry) openDetail(entryToRecord(entry));
   });
-  loadShopIds();
+  loadShopIds().then(function(){ if (items.length) render(); });
 
   Promise.all([ loadSearchIndex(), loadBadges() ])
     .then(function(res){

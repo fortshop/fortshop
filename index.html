@@ -3,8 +3,31 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Fort — Fortnite Item Shop Tracker</title>
+<!-- ===== SEO & SITE URLS · DOMAIN SWAP: FortShop will move to an official domain later.
+     Every sportstalk24.com URL for this page lives in the block below (title / meta /
+     canonical / Open Graph / JSON-LD), plus sitemap.xml and robots.txt — one
+     find-and-replace of "sportstalk24.com" per file when the day comes. ===== -->
+<title>Fortnite Item Shop Today — What’s in the Fortnite Item Shop Right Now | FortShop</title>
+<meta name="description" content="See what’s in the Fortnite item shop today: every skin, bundle, emote and Jam Track in today’s Fortnite shop with V-Bucks prices, back-after badges, a live countdown to the next rotation, rarest items and predictions for what’s coming back next.">
+<meta name="keywords" content="fortnite item shop today, what's in the fortnite item shop today, fortnite item shop, fortnite shop today, fortnite item shop tracker, today's fortnite shop, fortnite shop countdown, fortnite skins today, fortnite bundles today, fortnite jam tracks">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://sportstalk24.com/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="FortShop">
+<meta property="og:title" content="Fortnite Item Shop Today — What’s in the Fortnite Item Shop Right Now | FortShop">
+<meta property="og:description" content="See what’s in the Fortnite item shop today: every skin, bundle, emote and Jam Track in today’s Fortnite shop with V-Bucks prices, back-after badges, a live countdown to the next rotation, rarest items and predictions for what’s coming back next.">
+<meta property="og:url" content="https://sportstalk24.com/">
+<meta property="og:image" content="https://sportstalk24.com/assets/favicon.svg">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Fortnite Item Shop Today — What’s in the Fortnite Item Shop Right Now | FortShop">
+<meta name="twitter:description" content="See what’s in the Fortnite item shop today: every skin, bundle, emote and Jam Track in today’s Fortnite shop with V-Bucks prices, back-after badges, a live countdown to the next rotation, rarest items and predictions for what’s coming back next.">
+<meta name="twitter:image" content="https://sportstalk24.com/assets/favicon.svg">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","name":"FortShop","url":"https://sportstalk24.com/","logo":"https://sportstalk24.com/assets/favicon.svg","description":"FortShop is a free Fortnite item shop tracker: today’s item shop, cosmetics search, rarest skins and return predictions."},{"@type":"WebSite","name":"FortShop","url":"https://sportstalk24.com/","publisher":{"@type":"Organization","name":"FortShop"}}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "What’s in the Fortnite item shop today?", "acceptedAnswer": {"@type": "Answer", "text": "Everything listed on this page. FortShop shows every skin, bundle, emote, wrap and Jam Track in today’s Fortnite item shop with live V-Bucks prices, updated at every shop rotation — and Today’s Top Picks highlights the day’s best returns and brand-new items."}}, {"@type": "Question", "name": "What time does the Fortnite item shop reset?", "acceptedAnswer": {"@type": "Answer", "text": "The Fortnite item shop resets every day at 7:00 PM Eastern Time. The countdown at the top of this page shows exactly how long is left until the next rotation, and you can switch it to your own timezone if you’re on the West Coast or anywhere else."}}, {"@type": "Question", "name": "When is a skin coming back to the Fortnite item shop?", "acceptedAnswer": {"@type": "Answer", "text": "Epic Games doesn’t announce return dates in advance, so nobody knows for certain. FortShop tracks every skin’s shop history and estimates its return from its usual gap between appearances — search for any skin on the Search page to see when it was last seen and when it’s expected back, or open the Predictions page for the most overdue items right now."}}, {"@type": "Question", "name": "What are the rarest Fortnite skins?", "acceptedAnswer": {"@type": "Answer", "text": "The rarest Fortnite skins are the ones that have been away from the item shop the longest. Our Rarest page ranks skins and cosmetics by days since their last appearance, and the items marked Crowned — like Renegade Raider and Aerial Assault Trooper — have no shop appearances in our tracked records at all, so there is currently no way to buy them."}}]}</script>
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+<meta name="theme-color" content="#0b2a6b">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <style>
   :root{
     --bg-deep:#0d1440;
@@ -177,6 +200,10 @@
     color:var(--text-dim);
   }
   .status.error{color:#ff8f8f}
+  .faq{max-width:1200px;margin:34px auto 0;padding:0 18px;width:calc(100% - 32px)}
+  .faq-item{background:rgba(8,12,38,.55);border:1px solid var(--panel-border);border-radius:12px;padding:14px 18px;margin-top:10px}
+  .faq-item h3{font-size:16px;margin-bottom:6px}
+  .faq-item p{color:var(--text-dim);font-size:14.5px;line-height:1.55}
   footer{
     text-align:center;
     padding:26px 16px 34px;
@@ -435,6 +462,27 @@
   .share-btn:hover{border-color:var(--accent-blue)}
   .share-btn[disabled]{opacity:.6;cursor:wait}
 </style>
+
+<style>
+/* ===== FortShop mobile pass · Nov 13, 2026: tap targets, 2-up grid,
+   sticky bar, no iOS input zoom, no horizontal overflow ===== */
+html,body{overflow-x:hidden}
+img{max-width:100%}
+nav a{min-height:44px;display:inline-flex;align-items:center}
+.wish-toggle{min-height:44px}
+.chip{min-height:44px;display:inline-flex;align-items:center}
+@media (max-width:920px){
+  select,input{font-size:16px}
+}
+@media (max-width:520px){
+  .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .card{min-width:0}
+  .card-name{overflow-wrap:break-word}
+  .wish-btn{width:44px;height:44px;font-size:19px}
+  .cat{display:flex;margin-top:8px}
+}
+.shop-bar{position:sticky;top:8px;z-index:60;background:rgba(8,12,38,.95);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+</style>
 </head>
 <body>
 
@@ -465,6 +513,7 @@
   <a href="predictions.html">Predictions</a>
   <a href="search.html">Search</a>
   <a href="wishlist.html">Wishlist<span class="nav-count" id="wishCount" hidden></span></a>
+  <a href="alerts.html">Alerts</a>
 </nav>
 
 <details class="categories" id="catLegend" aria-label="FortShop categories">
@@ -485,11 +534,20 @@
   <div class="status" id="status">Loading the item shop&hellip;</div>
 </main>
 
+<section class="faq" aria-label="Frequently asked questions">
+  <h2 class="section-title">Fortnite Item Shop FAQ</h2>
+  <div class="faq-item"><h3>What’s in the Fortnite item shop today?</h3><p>Everything listed on this page. FortShop shows every skin, bundle, emote, wrap and Jam Track in today’s Fortnite item shop with live V-Bucks prices, updated at every shop rotation — and Today’s Top Picks highlights the day’s best returns and brand-new items.</p></div>
+  <div class="faq-item"><h3>What time does the Fortnite item shop reset?</h3><p>The Fortnite item shop resets every day at 7:00 PM Eastern Time. The countdown at the top of this page shows exactly how long is left until the next rotation, and you can switch it to your own timezone if you’re on the West Coast or anywhere else.</p></div>
+  <div class="faq-item"><h3>When is a skin coming back to the Fortnite item shop?</h3><p>Epic Games doesn’t announce return dates in advance, so nobody knows for certain. FortShop tracks every skin’s shop history and estimates its return from its usual gap between appearances — search for any skin on the Search page to see when it was last seen and when it’s expected back, or open the Predictions page for the most overdue items right now.</p></div>
+  <div class="faq-item"><h3>What are the rarest Fortnite skins?</h3><p>The rarest Fortnite skins are the ones that have been away from the item shop the longest. Our Rarest page ranks skins and cosmetics by days since their last appearance, and the items marked Crowned — like Renegade Raider and Aerial Assault Trooper — have no shop appearances in our tracked records at all, so there is currently no way to buy them.</p></div>
+</section>
+
 <footer>
   <div>Unofficial fan project. Not affiliated with Epic Games.</div>
   <div class="credit">Shop &amp; cosmetics data and item images: <a href="https://fortnite-api.com" target="_blank" rel="noopener">fortnite-api.com</a> (free public API) &middot; Shop appearance history (May&ndash;Nov 2026): public datamining record of the same API</div>
   <div class="credit">Showcase videos: Gnejs Gaming (YouTube)</div>
   <div class="credit">Fortnite and all item artwork &copy; Epic Games, Inc.</div>
+  <div class="credit">FortShop is a free Fortnite item shop tracker. Check what’s in the Fortnite item shop today, search every Fortnite cosmetic, discover the rarest Fortnite skins, and see predictions for which skins are coming back to the Fortnite shop next.</div>
 </footer>
 
 <div class="overlay" id="detailOverlay" hidden>
@@ -545,9 +603,33 @@
         var items = [];
         parts.forEach(function(p){ items = items.concat(p.items || []); });
         return { items: items };
-      });
+      })
+      .then(function(out){ return mergeReturns(out); });
   }
-  function loadBadges(){
+  /* Expected-return data (data/returns.json, regenerated daily): fills the
+     last-seen / expected-return gaps the baked index leaves — notably
+     type-median estimates for items with a single tracked shop stint. */
+  var returnsCache = null;
+  function loadReturns(){
+    if (!returnsCache){
+      returnsCache = fetchData("returns.json").catch(function(){ return null; });
+    }
+    return returnsCache;
+  }
+  function mergeReturns(out){
+    return loadReturns().then(function(doc){
+      if (doc && doc.items){
+        (out.items || []).forEach(function(it){
+          var rec = doc.items[it.i];
+          if (!rec) return;
+          if (!it.ls) it.ls = rec.lastSeen || "";
+          if (!it.er) it.er = rec.expected || "";
+        });
+      }
+      return out;
+    }).catch(function(){ return out; });
+  }
+    function loadBadges(){
     return fetchData("badges.json").then(function(d){
       badgeData = { badges: d.badges || {}, backAfter: d.backAfter || {} };
     }).catch(function(){ /* badges are decorative; render without them */ });
@@ -700,6 +782,7 @@
       img: e.img || "", feat: e.feat || "",
       v: e.v || null, sv: e.sv || "", set: e.st || "",
       intro: e.intro || "", desc: e.desc || "", added: e.added || "",
+      ls: e.ls || "", er: e.er || "",
       price: fallback && fallback.price, was: fallback && fallback.was
     };
   }
@@ -734,7 +817,7 @@
     var html = '<div class="detail-head">'
       + '<div class="detail-img" style="background:radial-gradient(circle at 50% 35%,' + color + '38,rgba(5,8,26,.6))">'
       + (rec.img
-          ? '<img src="' + esc(rec.img) + '" alt="' + esc(rec.name) + '" onerror="this.parentNode.innerHTML=\'<span class=&quot;no-img&quot;>Image unavailable</span>\'">'
+          ? '<img src="' + esc(rec.img) + '" alt="' + esc(rec.name) + (rec.type ? " — Fortnite " + esc(rec.type) : "") + (rec.rarityLabel ? " · " + esc(rec.rarityLabel) : "") + '" onerror="this.parentNode.innerHTML=\'<span class=&quot;no-img&quot;>Image unavailable</span>\'">'
           : '<span class="no-img">Image unavailable</span>')
       + "</div>"
       + '<div class="detail-info">'
@@ -754,6 +837,9 @@
       + (rec.set ? "<div><b>Set:</b> " + esc(rec.set) + "</div>" : "")
       + (rec.intro ? "<div><b>Introduced:</b> " + esc(rec.intro.replace(/^Introduced in /i, "")) + "</div>" : "")
       + (rec.added ? "<div><b>Added to the game:</b> " + esc(fmtDate(rec.added)) + "</div>" : "")
+      + (rec.ls ? "<div><b>Last seen in shop:</b> " + esc(fmtDate(rec.ls)) + "</div>" : "")
+      + (rec.er ? "<div><b>Expected return:</b> ~" + esc(fmtDate(rec.er)) + " (estimate)</div>" : "")
+      + (!rec.ls ? "<div><b>Shop history:</b> Not seen in the shop in our tracked records (May 2 &ndash; Nov 12, 2026)</div>" : "")
       + "</div>"
       + "</div></div>";
     if (rec.v && rec.v.length){
@@ -885,6 +971,96 @@
     }
     return best === Infinity ? UNKNOWN_TYPE_PRIORITY : best;
   }
+  /* Type-category groups for dissolved small sections. A card's category
+     comes from its primary item: the best-priority (most prominent) type
+     among the items the offer contains. */
+  var CATEGORY_LABELS = {
+    outfit: "Outfits",
+    backpack: "Back Bling", backbling: "Back Bling",
+    pickaxe: "Pickaxes",
+    glider: "Gliders",
+    contrail: "Contrails",
+    emote: "Emotes",
+    wrap: "Wraps",
+    shoe: "Shoes", shoes: "Shoes",
+    sidekick: "Sidekicks", pet: "Sidekicks", petcarrier: "Sidekicks",
+    body: "Cars & Vehicle Gear", skin: "Cars & Vehicle Gear",
+    wheel: "Cars & Vehicle Gear", wheels: "Cars & Vehicle Gear",
+    decal: "Cars & Vehicle Gear", decals: "Cars & Vehicle Gear",
+    boost: "Cars & Vehicle Gear", trail: "Cars & Vehicle Gear",
+    trails: "Cars & Vehicle Gear",
+    loadingscreen: "Loading Screens",
+    spray: "Sprays",
+    emoji: "Emoticons", emoticon: "Emoticons",
+    banner: "Banners",
+    toy: "Toys",
+    aura: "Auras",
+    music: "Lobby Music", lobbymusic: "Lobby Music",
+    bass: "Instruments", guitar: "Instruments", drum: "Instruments",
+    drums: "Instruments", mic: "Instruments", keytar: "Instruments",
+    jam: "Jam Tracks", jamtrack: "Jam Tracks", jam_track: "Jam Tracks",
+    jamtracks: "Jam Tracks", track: "Jam Tracks", tracks: "Jam Tracks"
+  };
+  function primaryTypeKey(items){
+    var bestKey = "", bestP = Infinity;
+    (items || []).forEach(function(item){
+      var key = (item && item.type && item.type.value) || "";
+      var p = typePriority(key);
+      if (p < bestP){ bestP = p; bestKey = key; }
+    });
+    return bestKey;
+  }
+  function categoryLabel(catKey){
+    var key = String(catKey || "").toLowerCase();
+    return CATEGORY_LABELS[key] || "More Items";
+  }
+  function categoryRank(catKey){
+    var key = String(catKey || "").toLowerCase();
+    if (key === "jam" || key === "jamtrack" || key === "jam_track" ||
+        key === "jamtracks" || key === "track" || key === "tracks"){
+      return 1000;
+    }
+    return typePriority(key);
+  }
+  /* The merge rule: a shop section with more than 3 offers keeps its own
+     named section (Marvel, Star Wars, ...). A section with 3 or fewer
+     offers dissolves — its cards move into type-category groups
+     (Outfits, Pickaxes, Wraps, ...) so a lone bundle or a stray emote
+     doesn't get a whole section heading to itself. Category groups rank
+     by the shop's type order — outfits first, vehicle gear in the
+     middle, Jam Tracks last; at equal rank a named section renders
+     before a category group. */
+  function mergeSmallSections(sections){
+    var kept = [], groups = {}, order = [];
+    sections.forEach(function(sec){
+      if (sec.cards.length > 3){ kept.push(sec); return; }
+      sec.cards.forEach(function(card){
+        var label = categoryLabel(card.catKey);
+        if (!groups[label]){
+          groups[label] = {
+            name: label, cards: [], isCategory: true,
+            rank: categoryRank(card.catKey),
+            sectionIndex: 1000 + order.length
+          };
+          order.push(label);
+        }
+        groups[label].cards.push(card);
+      });
+    });
+    order.forEach(function(label){
+      var g = groups[label];
+      g.cards = g.cards.map(function(card, i){
+        return { card: card, i: i };
+      }).sort(function(a, b){
+        return (cardPriority(a.card) - cardPriority(b.card)) || (a.i - b.i);
+      }).map(function(x){ return x.card; });
+    });
+    return kept.concat(order.map(function(label){
+      return groups[label];
+    })).sort(function(a, b){
+      return (a.rank - b.rank) || (a.sectionIndex - b.sectionIndex);
+    });
+  }
   function allEntryItems(entry){
     return [].concat(
       entry.brItems || [], entry.items || [], entry.instruments || [],
@@ -915,6 +1091,7 @@
         typeKey: isJamBundle ? "jam" : "bundle",
         typePriority: isJamBundle ? JAM_PRIORITY : itemsTypePriority(allEntryItems(entry)),
         rarity: "Bundle", rarityKey: "bundle",
+        catKey: isJamBundle ? "jam" : primaryTypeKey(allEntryItems(entry)),
         img: bImg, price: price, was: was, set: entrySet(entry)
       };
     }
@@ -926,7 +1103,7 @@
         type: "Jam Track" + (t.artist ? " · " + t.artist : ""),
         typeKey: "jam",
         typePriority: JAM_PRIORITY,
-        rarity: "Jam Track", rarityKey: "jam",
+        rarity: "Jam Track", rarityKey: "jam", catKey: "jam",
         img: t.albumArt || "", price: price, was: was, set: entrySet(entry)
       };
     }
@@ -950,6 +1127,7 @@
       rarity: rarityObj.displayValue || "",
       rarityKey: (it.rarity && it.rarity.value) ||
                  (it.series && it.series.value) || "",
+      catKey: primaryTypeKey(allEntryItems(entry)),
       img: pickImage(it, entry), price: price, was: was, set: entrySet(entry)
     };
   }
@@ -962,7 +1140,7 @@
       + wishBtnHTML(c.id)
       + '<div class="card-img" style="background:radial-gradient(circle at 50% 35%,' + color + '38,rgba(5,8,26,.6))">'
       + (c.img
-          ? '<img src="' + esc(c.img) + '" alt="' + esc(c.name) + '" loading="lazy" onerror="this.parentNode.innerHTML=\'<span class=&quot;no-img&quot;>Image unavailable</span>\'">'
+          ? '<img src="' + esc(c.img) + '" alt="' + esc(c.name) + (c.type ? " — Fortnite " + esc(c.type) : "") + (c.rarity ? " · " + esc(c.rarity) : "") + '" loading="lazy" onerror="this.parentNode.innerHTML=\'<span class=&quot;no-img&quot;>Image unavailable</span>\'">'
           : '<span class="no-img">Image unavailable</span>')
       + "</div>"
       + '<div class="rarity-bar" style="background:' + color + '"></div>'
@@ -1025,7 +1203,7 @@
       });
       if (!cards.length) return;
       html += '<h2 class="section-title">' + esc(sec.name) + "</h2>";
-      var grouped = groupCardsBySet(cards);
+      var grouped = sec.isCategory ? null : groupCardsBySet(cards);
       if (!grouped){
         html += '<div class="grid">';
         cards.forEach(function(c){ html += cardHTML(c); });
@@ -1331,6 +1509,9 @@
       dateEl.textContent = "Today's shop · " + d.toLocaleDateString(undefined, {
         weekday: "long", year: "numeric", month: "long", day: "numeric"
       });
+      document.title = "Fortnite Item Shop Today — " +
+        d.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" }) +
+        " | FortShop — Fortnite Item Shop Tracker";
     } else {
       dateEl.textContent = "Today's shop";
     }
@@ -1358,12 +1539,13 @@
     }).sort(function(a, b){
       return (a.rank - b.rank) || (a.sectionIndex - b.sectionIndex);
     });
+    allSections = mergeSmallSections(allSections);
     /* Jam Tracks sit at the very bottom of the whole page: pull any stray
        Jam Track cards out of mixed sections into the Jam Tracks section so
        no Jam Track ever renders above a regular item. */
     var jamSection = null, strayJamCards = [];
     allSections.forEach(function(sec){
-      if (/jam\s*tracks?/i.test(sec.name)){ jamSection = sec; return; }
+      if (/jam\s*tracks?/i.test(sec.name) && !jamSection){ jamSection = sec; return; }
       var kept = [];
       sec.cards.forEach(function(card){
         if (cardPriority(card) >= JAM_PRIORITY) strayJamCards.push(card);
