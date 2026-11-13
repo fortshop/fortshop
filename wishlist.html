@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fort — Your Wishlist · Fortnite Item Shop</title>
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+<style>
+  :root{
+    --bg-deep:#0d1440;
+    --bg-mid:#182263;
+    --panel:#1a2350;
+    --panel-border:rgba(255,255,255,.09);
+    --accent-blue:#2fb9ff;
+    --accent-purple:#9d4dff;
+    --text:#ffffff;
+    --text-dim:#a9b4d8;
+    --font-body:"Segoe UI",system-ui,-apple-system,Arial,sans-serif;
+    --font-display:"Segoe UI",system-ui,-apple-system,Arial,sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{
+    font-family:var(--font-body);
+    color:var(--text);
+    min-height:100vh;
+    background:linear-gradient(180deg,#0b2a6b 0%,var(--bg-mid) 48%,var(--bg-deep) 100%);
+    background-attachment:fixed;
+  }
+  header{text-align:center;padding:44px 16px 8px}
+  .logo{
+    font-family:var(--font-display);
+    font-size:52px;
+    font-weight:900;
+    letter-spacing:.35em;
+    text-indent:.35em;
+    text-transform:uppercase;
+    color:#fff;
+  }
+  .tagline{
+    margin-top:6px;
+    font-size:14px;
+    font-weight:700;
+    letter-spacing:.3em;
+    text-indent:.3em;
+    text-transform:uppercase;
+    color:var(--text-dim);
+  }
+  nav{
+    display:flex;
+    justify-content:center;
+    gap:10px;
+    flex-wrap:wrap;
+    padding:20px 16px 0;
+  }
+  nav a{
+    color:var(--text-dim);
+    text-decoration:none;
+    font-size:13px;
+    font-weight:700;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    padding:7px 16px;
+    border:1px solid var(--panel-border);
+    border-radius:20px;
+  }
+  nav a:hover{color:#fff;border-color:var(--accent-blue)}
+  nav a.active{color:#fff;border-color:var(--accent-blue);background:rgba(47,185,255,.15)}
+  .categories{
+    max-width:1200px;
+    margin:22px auto 0;
+    padding:12px 18px;
+    width:calc(100% - 32px);
+    background:rgba(8,12,38,.55);
+    border:1px solid var(--panel-border);
+    border-radius:12px;
+  }
+  .categories-title{
+    font-size:12px;
+    font-weight:800;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    color:#fff;
+  }
+  .cat{display:inline-flex;align-items:center;gap:8px}
+  .cat-def{font-size:12.5px;color:var(--text-dim);line-height:1.4}
+  .badge{
+    display:inline-block;
+    font-size:10.5px;
+    font-weight:800;
+    letter-spacing:.05em;
+    text-transform:uppercase;
+    padding:3px 9px;
+    border-radius:20px;
+    white-space:nowrap;
+  }
+  .b-crowned{background:#f2c230;color:#241a00}
+  .b-hot{background:#ff6a3d;color:#2b0e02}
+  .b-debut{background:#2ad4c4;color:#04302b}
+  .b-overdue{background:#9d4dff;color:#ffffff}
+  .b-back{background:#2fb9ff;color:#06283d}
+  .badges{display:flex;flex-wrap:wrap;gap:5px}
+  .page-title{
+    text-align:center;
+    font-size:26px;
+    font-weight:800;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    margin-top:28px;
+    padding:0 16px;
+  }
+  .intro{
+    max-width:760px;
+    margin:12px auto 0;
+    padding:0 16px;
+    text-align:center;
+    font-size:14px;
+    line-height:1.55;
+    color:var(--text-dim);
+  }
+  .intro strong{color:#fff}
+  main{max-width:1200px;margin:0 auto;padding:10px 16px 30px}
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
+    gap:16px;
+    margin-top:18px;
+  }
+  .card{
+    background:var(--panel);
+    border:1px solid var(--panel-border);
+    border-radius:12px;
+    overflow:hidden;
+    display:flex;
+    flex-direction:column;
+    transition:transform .12s ease,border-color .12s ease;
+    position:relative;
+  }
+  .card:hover{transform:translateY(-3px);border-color:var(--accent-blue)}
+  .card[data-did]{cursor:pointer}
+  .card-img{
+    aspect-ratio:1/1;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .card-img img{width:100%;height:100%;object-fit:cover;display:block}
+  .card-img .no-img{color:var(--text-dim);font-size:13px;padding:12px;text-align:center}
+  .rarity-bar{height:5px;flex:none}
+  .card-body{padding:12px 14px 14px;display:flex;flex-direction:column;gap:6px;flex:1}
+  .card-name{font-size:15px;font-weight:700;line-height:1.25}
+  .card-type{font-size:12px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.08em}
+  .rarity{
+    align-self:flex-start;
+    font-size:11px;
+    font-weight:700;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    padding:3px 9px;
+    border-radius:20px;
+    color:#0b0b18;
+    background:#b1b1b1;
+  }
+  .price{
+    margin-top:auto;
+    display:flex;
+    align-items:center;
+    gap:6px;
+    font-size:16px;
+    font-weight:800;
+  }
+  .price img{width:18px;height:18px}
+  .price .was{font-size:13px;font-weight:600;color:var(--text-dim);text-decoration:line-through}
+  .status{
+    text-align:center;
+    padding:60px 16px;
+    font-size:17px;
+    color:var(--text-dim);
+  }
+  .status.error{color:#ff8f8f}
+  footer{
+    text-align:center;
+    padding:26px 16px 34px;
+    font-size:13px;
+    color:var(--text-dim);
+    border-top:1px solid rgba(255,255,255,.08);
+    max-width:1200px;
+    margin:0 auto;
+  }
+  footer .credit{margin-top:6px;font-size:12px}
+  /* Wishlist + declutter (shared component) */
+  .wish-btn{
+    position:absolute;
+    top:8px;right:8px;
+    z-index:3;
+    width:34px;height:34px;
+    border-radius:50%;
+    border:1px solid var(--panel-border);
+    background:rgba(5,8,26,.72);
+    color:#fff;
+    font-size:17px;
+    line-height:1;
+    cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+    font-family:inherit;
+    padding:0;
+  }
+  .wish-btn:hover{border-color:var(--accent-blue)}
+  .wish-btn.on{background:#ff5c7a;border-color:#ff5c7a;color:#fff}
+  .card.in-shop{border-color:#37e0a0}
+  .in-shop-tag{
+    align-self:flex-start;
+    font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;
+    padding:3px 9px;border-radius:20px;background:#37e0a0;color:#05281b;
+  }
+  .wish-toggle{
+    align-self:flex-start;
+    cursor:pointer;
+    font-family:inherit;
+    font-size:13.5px;font-weight:700;
+    padding:9px 18px;border-radius:24px;
+    border:1px solid var(--panel-border);
+    background:rgba(0,0,0,.25);color:#fff;
+  }
+  .wish-toggle:hover{border-color:var(--accent-blue)}
+  .wish-toggle.on{background:#ff5c7a;border-color:#ff5c7a}
+  .wish-remove{
+    margin-top:8px;align-self:flex-start;cursor:pointer;font-family:inherit;
+    font-size:12px;font-weight:700;letter-spacing:.05em;
+    padding:6px 13px;border-radius:16px;border:1px solid var(--panel-border);
+    background:rgba(0,0,0,.25);color:var(--text-dim);
+  }
+  .wish-remove:hover{color:#fff;border-color:#ff5c7a}
+  .wish-actions{display:flex;justify-content:center;margin-top:26px}
+  .nav-count{
+    display:inline-block;
+    min-width:19px;
+    padding:1px 5px;
+    margin-left:6px;
+    border-radius:10px;
+    background:#37e0a0;color:#05281b;
+    font-size:11px;font-weight:800;
+    text-align:center;
+    vertical-align:2px;
+  }
+  .nav-count[hidden]{display:none}
+  .categories summary{
+    display:flex;align-items:center;justify-content:center;gap:10px;
+    cursor:pointer;list-style:none;
+  }
+  .categories summary::-webkit-details-marker{display:none}
+  .categories .cat-hint{
+    font-size:11.5px;font-weight:700;color:var(--accent-blue);
+    letter-spacing:.05em;text-transform:uppercase;
+  }
+  .cat-list{
+    display:flex;flex-wrap:wrap;gap:8px 22px;
+    align-items:center;justify-content:center;margin-top:10px;
+  }
+  /* Item detail overlay (shared component) */
+  .overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(4,6,24,.78);
+    display:flex;
+    align-items:flex-start;
+    justify-content:center;
+    padding:28px 12px;
+    overflow-y:auto;
+    z-index:50;
+  }
+  .overlay[hidden]{display:none}
+  .detail{
+    position:relative;
+    width:min(880px,96vw);
+    background:#141d47;
+    border:1px solid var(--panel-border);
+    border-radius:16px;
+    padding:26px;
+  }
+  .detail-close{
+    position:absolute;
+    top:10px;right:14px;
+    background:none;border:none;
+    color:var(--text-dim);
+    font-size:30px;line-height:1;
+    cursor:pointer;
+    padding:4px 8px;
+  }
+  .detail-close:hover{color:#fff}
+  .detail-head{display:flex;gap:22px;flex-wrap:wrap}
+  .detail-img{
+    width:250px;height:250px;flex:none;
+    border-radius:12px;
+    overflow:hidden;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .detail-img img{width:100%;height:100%;object-fit:cover;display:block}
+  .detail-img .no-img{color:var(--text-dim);font-size:13px}
+  .detail-info{flex:1;min-width:240px;display:flex;flex-direction:column;gap:9px}
+  .detail-name{
+    font-size:27px;font-weight:900;
+    letter-spacing:.04em;text-transform:uppercase;line-height:1.15;
+  }
+  .detail-desc{font-size:14.5px;line-height:1.55;color:#dbe2f7}
+  .detail-meta{font-size:13.5px;color:var(--text-dim);line-height:1.7}
+  .detail-meta b{color:#fff;font-weight:700}
+  .detail h3{
+    font-size:15px;font-weight:800;
+    letter-spacing:.12em;text-transform:uppercase;
+    margin:26px 0 6px;
+  }
+  .detail .note{font-size:12.5px;color:var(--text-dim);margin-bottom:10px}
+  .styles-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(96px,1fr));
+    gap:12px;
+  }
+  .style-cell{text-align:center}
+  .style-cell img{
+    width:100%;aspect-ratio:1/1;object-fit:cover;
+    border-radius:10px;border:1px solid var(--panel-border);
+    background:rgba(255,255,255,.05);display:block;
+  }
+  .style-cell span{display:block;margin-top:5px;font-size:12px;color:var(--text-dim);line-height:1.3}
+  .video-wrap{
+    position:relative;
+    aspect-ratio:16/9;
+    border-radius:12px;
+    overflow:hidden;
+    border:1px solid var(--panel-border);
+    background:#000;
+  }
+  .video-wrap iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+  .wrap-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(150px,1fr));
+    gap:12px;
+  }
+  .wrap-cell{
+    background:rgba(255,255,255,.05);
+    border:1px solid var(--panel-border);
+    border-radius:10px;
+    padding:10px 8px 8px;
+    text-align:center;
+  }
+  .wrap-cell svg{width:100%;height:auto;display:block}
+  .wrap-cell figcaption{margin-top:6px;font-size:12px;color:var(--text-dim);letter-spacing:.06em;text-transform:uppercase;font-weight:700}
+  @media (max-width:520px){
+    .logo{font-size:38px}
+    .grid{grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px}
+    .detail{padding:20px 16px}
+    .detail-img{width:100%;height:auto;aspect-ratio:1/1}
+  }
+  /* Search page extras */
+  .toolbar{display:flex;justify-content:center;padding:22px 16px 4px}
+  .toolbar input{
+    width:min(420px,90vw);
+    padding:11px 16px;
+    border-radius:24px;
+    border:1px solid var(--panel-border);
+    background:rgba(0,0,0,.30);
+    color:#fff;
+    font-size:15px;
+    outline:none;
+    font-family:inherit;
+  }
+  .toolbar input:focus{border-color:var(--accent-blue)}
+  .toolbar input::placeholder{color:var(--text-dim)}
+  .filters{
+    max-width:1000px;
+    margin:16px auto 0;
+    padding:0 16px;
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+    align-items:center;
+  }
+  .chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+  .chip{
+    cursor:pointer;
+    font-family:inherit;
+    font-size:12px;
+    font-weight:700;
+    letter-spacing:.07em;
+    text-transform:uppercase;
+    padding:6px 13px;
+    border-radius:20px;
+    border:1px solid var(--panel-border);
+    background:rgba(0,0,0,.25);
+    color:var(--text-dim);
+  }
+  .chip:hover{color:#fff}
+  .chip .dot{
+    display:inline-block;
+    width:9px;height:9px;
+    border-radius:50%;
+    margin-right:6px;
+    vertical-align:1px;
+  }
+  .chip.active{color:#0b0b18;border-color:transparent}
+  .chip.active .dot{background:#0b0b18 !important}
+  .type-row{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-size:13px;
+    color:var(--text-dim);
+    text-transform:uppercase;
+    letter-spacing:.08em;
+    font-weight:700;
+  }
+  .type-row select{
+    font-family:inherit;
+    font-size:14px;
+    padding:8px 12px;
+    border-radius:20px;
+    border:1px solid var(--panel-border);
+    background:rgba(0,0,0,.30);
+    color:#fff;
+    outline:none;
+  }
+  .type-row select:focus{border-color:var(--accent-blue)}
+  .results-meta{
+    text-align:center;
+    margin-top:20px;
+    font-size:13px;
+    color:var(--text-dim);
+    letter-spacing:.04em;
+  }
+  .group-title{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin:28px 4px 0;
+    font-size:17px;
+    font-weight:800;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    color:#fff;
+  }
+  .group-title .g-bar{width:26px;height:5px;border-radius:3px;flex:none}
+  .group-title .g-count{
+    font-size:12.5px;
+    font-weight:700;
+    letter-spacing:.06em;
+    color:var(--text-dim);
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">Fort</div>
+  <div class="tagline">Fortnite Item Shop</div>
+</header>
+
+<nav>
+  <a href="index.html">Today&rsquo;s Shop</a>
+  <a href="rarest.html">Rarest</a>
+  <a href="predictions.html">Predictions</a>
+  <a href="search.html">Search</a>
+  <a href="wishlist.html" class="active">Wishlist<span class="nav-count" id="wishCount" hidden></span></a>
+</nav>
+
+<details class="categories" id="catLegend" aria-label="FortShop categories">
+  <summary><span class="categories-title">FortShop Categories</span><span class="cat-hint">What the badges mean</span></summary>
+  <div class="cat-list">
+  <span class="cat"><span class="badge b-crowned">&#128081; Crowned</span><span class="cat-def">Hasn&rsquo;t been buyable in our records &mdash; shop history tracked May 2 &ndash; Nov 12, 2026</span></span>
+  <span class="cat"><span class="badge b-hot">&#128293; Hot Return</span><span class="cat-def">Back in the shop after 60+ days away</span></span>
+  <span class="cat"><span class="badge b-debut">&#10024; Debut</span><span class="cat-def">Added to the game within the last 45 days</span></span>
+  <span class="cat"><span class="badge b-overdue">&#9203; Overdue</span><span class="cat-def">Due back by our return predictions</span></span>
+  </div>
+</details>
+
+<h1 class="page-title">Your Wishlist</h1>
+<p class="intro">
+  Your saved items live on this device &mdash; no account, no sign-in.
+  Anything on your list that is in today&rsquo;s shop gets flagged
+  <strong>In shop today!</strong> with its price, so you never miss a return.
+</p>
+
+<div class="results-meta" id="resultsMeta"></div>
+
+<main id="content">
+  <div class="status" id="status">Loading your wishlist&hellip;</div>
+</main>
+
+<footer>
+  <div>Unofficial fan project. Not affiliated with Epic Games.</div>
+  <div class="credit">Catalogue data from the public fortnite-api.com API.</div>
+</footer>
+
+<div class="overlay" id="detailOverlay" hidden>
+  <div class="detail" role="dialog" aria-modal="true" aria-label="Item details">
+    <button class="detail-close" id="detailClose" aria-label="Close">&times;</button>
+    <div id="detailContent"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ---------- Shared FortShop component: data, badges, detail view ---------- */
+  var RARITY_COLORS = {
+    common:"#b1b1b1", uncommon:"#5ac84c", rare:"#49acf2", epic:"#c05be0",
+    legendary:"#ea8d33", marvel:"#ed1c24", starwars:"#e8c832",
+    icon:"#2cc6ff", gaminglegends:"#7d5cff", dark:"#d14fc4",
+    frozen:"#aee6f5", lava:"#e25822", shadow:"#8a8aa8", slurp:"#29d6c8",
+    dc:"#6479c9", crew:"#37e0a0", mythic:"#e3c565",
+    bundle:"#ffd24d", jam:"#b48cff"
+  };
+  var BADGE_DEFS = {
+    crowned:["\u{1F451}","Crowned","b-crowned"],
+    hot:["\u{1F525}","Hot Return","b-hot"],
+    debut:["\u2728","Debut","b-debut"],
+    overdue:["\u23F3","Overdue","b-overdue"]
+  };
+  var BADGE_ORDER = ["crowned","hot","debut","overdue"];
+  var badgeData = { badges:{}, backAfter:{} };
+  var detailIndex = null;
+
+  function esc(s){
+    return String(s == null ? "" : s)
+      .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")
+      .replace(/"/g,"&quot;").replace(/'/g,"&#39;");
+  }
+  function fetchData(name){
+    return fetch("./data/" + name).then(function(r){
+      if (!r.ok) throw new Error("Data returned " + r.status);
+      return r.json();
+    }).catch(function(){
+      return fetch("../data/" + name).then(function(r){
+        if (!r.ok) throw new Error("Data returned " + r.status);
+        return r.json();
+      });
+    });
+  }
+  var SEARCH_INDEX_PARTS = ["search-index.json", "search-index-b.json", "search-index-c.json"];
+  function loadSearchIndex(){
+    return Promise.all(SEARCH_INDEX_PARTS.map(function(n){ return fetchData(n); }))
+      .then(function(parts){
+        var items = [];
+        parts.forEach(function(p){ items = items.concat(p.items || []); });
+        return { items: items };
+      });
+  }
+  function loadBadges(){
+    return fetchData("badges.json").then(function(d){
+      badgeData = { badges: d.badges || {}, backAfter: d.backAfter || {} };
+    }).catch(function(){ /* badges are decorative; render without them */ });
+  }
+  /* Decluttered chips: cards show at most ONE category badge (priority
+     Crowned > Hot Return > Debut > Overdue, the BADGE_ORDER) and the
+     "Back after" chip only for absences of 30+ days. The detail view
+     passes full = true and shows every badge. */
+  function chipsHTML(id, withBack, full){
+    if (!id) return "";
+    var list = badgeData.badges[id] || [];
+    var html = "";
+    BADGE_ORDER.forEach(function(key){
+      if (list.indexOf(key) === -1) return;
+      if (!full && html) return; /* cards: one category badge max */
+      var def = BADGE_DEFS[key];
+      html += '<span class="badge ' + def[2] + '">' + def[0] + " " + def[1] + "</span>";
+    });
+    if (withBack && badgeData.backAfter[id] >= 30){
+      html += '<span class="badge b-back">Back after ' + badgeData.backAfter[id] + " days</span>";
+    }
+    return html ? '<div class="badges">' + html + "</div>" : "";
+  }
+  /* ---------- Wishlist / Remind Me (on-device, no account) ---------- */
+  var WISH_KEY = "fortshop-wishlist";
+  function wishIds(){
+    try {
+      var v = JSON.parse(localStorage.getItem(WISH_KEY) || "[]");
+      return Array.isArray(v) ? v : [];
+    } catch (e) { return []; }
+  }
+  function wishSave(ids){
+    try { localStorage.setItem(WISH_KEY, JSON.stringify(ids)); } catch (e) {}
+  }
+  function wishHas(id){ return !!id && wishIds().indexOf(id) !== -1; }
+  var shopIdCache = null; /* Set of item ids in today's shop, once known */
+  function wishToggle(id){
+    if (!id) return;
+    var ids = wishIds(), i = ids.indexOf(id);
+    if (i === -1) ids.push(id); else ids.splice(i, 1);
+    wishSave(ids);
+    wishSyncButtons();
+    updateWishNavBadge();
+    wishSyncShopHighlights();
+  }
+  function wishBtnHTML(id){
+    if (!id) return "";
+    var on = wishHas(id);
+    return '<button type="button" class="wish-btn' + (on ? " on" : "") +
+      '" data-wish-btn="' + esc(id) + '" aria-pressed="' + on +
+      '" aria-label="Wishlist / remind me" title="Wishlist / Remind me">' +
+      (on ? "\u2665" : "\u2661") + "</button>";
+  }
+  function wishToggleHTML(id){
+    if (!id) return "";
+    var on = wishHas(id);
+    return '<button type="button" class="wish-toggle' + (on ? " on" : "") +
+      '" data-wish-btn="' + esc(id) + '" aria-pressed="' + on + '">' +
+      (on ? "\u2665 On your wishlist" : "\u2661 Wishlist / Remind me") + "</button>";
+  }
+  function wishSyncButtons(){
+    if (!document.querySelectorAll) return;
+    document.querySelectorAll("[data-wish-btn]").forEach(function(btn){
+      var on = wishHas(btn.getAttribute("data-wish-btn"));
+      btn.classList.toggle("on", on);
+      btn.setAttribute("aria-pressed", on ? "true" : "false");
+      btn.innerHTML = btn.classList.contains("wish-toggle")
+        ? (on ? "\u2665 On your wishlist" : "\u2661 Wishlist / Remind me")
+        : (on ? "\u2665" : "\u2661");
+    });
+  }
+  /* Delegated click helper: true when the click hit a wishlist button,
+     so card handlers can bail before opening the detail view. */
+  function wishClick(e){
+    var btn = e.target && e.target.closest ? e.target.closest("[data-wish-btn]") : null;
+    if (!btn) return false;
+    if (e.stopPropagation) e.stopPropagation();
+    wishToggle(btn.getAttribute("data-wish-btn"));
+    return true;
+  }
+  function wishSyncShopHighlights(){
+    if (!shopIdCache || !document.querySelectorAll) return;
+    document.querySelectorAll("[data-did]").forEach(function(card){
+      var id = card.getAttribute("data-did");
+      var on = wishHas(id) && shopIdCache.has(id);
+      card.classList.toggle("in-shop", !!on);
+      var tag = card.querySelector ? card.querySelector(".in-shop-tag") : null;
+      if (on && !tag){
+        tag = document.createElement("span");
+        tag.className = "in-shop-tag";
+        tag.textContent = "In shop today!";
+        var body = card.querySelector ? card.querySelector(".card-body") : null;
+        if (body) body.insertBefore(tag, body.firstChild);
+      } else if (!on && tag){
+        tag.remove();
+      }
+    });
+  }
+  /* Nav badge: how many wishlist items are in today's shop. */
+  function updateWishNavBadge(){
+    var el = document.getElementById("wishCount");
+    if (!el) return;
+    var ids = wishIds();
+    if (!ids.length || !shopIdCache){ el.hidden = true; return; }
+    var n = 0;
+    ids.forEach(function(id){ if (shopIdCache.has(id)) n++; });
+    el.textContent = n;
+    el.hidden = !n;
+  }
+  function noteShopIds(idSet){
+    shopIdCache = idSet;
+    updateWishNavBadge();
+    wishSyncShopHighlights();
+  }
+  /* Pages that don't load the shop themselves fetch it once so the nav
+     badge and "In shop today!" highlights can work. */
+  function loadShopIds(){
+    return fetch("https://fortnite-api.com/v2/shop").then(function(r){
+      if (!r.ok) throw new Error("API returned " + r.status);
+      return r.json();
+    }).then(function(json){
+      var set = new Set();
+      ((json.data && json.data.entries) || []).forEach(function(entry){
+        [].concat(entry.brItems || [], entry.items || [],
+                  entry.instruments || [], entry.cars || [])
+          .forEach(function(it){ if (it && it.id) set.add(it.id); });
+      });
+      noteShopIds(set);
+      return set;
+    }).catch(function(){ return null; });
+  }
+  function fmtDate(iso){
+    if (!iso) return "";
+    var d = new Date(iso + "T00:00:00Z");
+    return d.toLocaleDateString("en-US", { timeZone:"UTC", year:"numeric", month:"long", day:"numeric" });
+  }
+  function ensureIndex(){
+    if (detailIndex) return Promise.resolve(detailIndex);
+    if (window.__searchItems){
+      detailIndex = new Map();
+      window.__searchItems.forEach(function(e){ detailIndex.set(e.i, e); });
+      return Promise.resolve(detailIndex);
+    }
+    return loadSearchIndex().then(function(d){
+      detailIndex = new Map();
+      (d.items || []).forEach(function(e){ detailIndex.set(e.i, e); });
+      return detailIndex;
+    });
+  }
+  function entryToRecord(e, fallback){
+    if (!e) return fallback || null;
+    return {
+      id: e.i, name: (e.n || "").trim(), type: e.td || "", typeKey: e.t || "",
+      rarityKey: e.r || "", rarityLabel: e.rd || "",
+      img: e.img || "", feat: e.feat || "",
+      v: e.v || null, sv: e.sv || "", set: e.st || "",
+      intro: e.intro || "", desc: e.desc || "", added: e.added || "",
+      price: fallback && fallback.price, was: fallback && fallback.was
+    };
+  }
+
+  var WRAP_SHAPES = [
+    ["Assault Rifle","M6 58 L52 52 L60 44 L96 42 L104 34 L118 34 L122 42 L150 44 L168 38 L206 38 L214 44 L214 54 L176 56 L172 74 L156 74 L150 58 L128 58 L122 84 L104 84 L106 60 L64 62 L58 68 L6 68 Z"],
+    ["Shotgun","M4 56 L70 50 L78 42 L150 42 L158 50 L216 50 L216 62 L158 62 L152 76 L128 76 L124 62 L84 64 L78 84 L62 84 L64 64 L4 66 Z"],
+    ["SMG","M30 50 L70 44 L78 34 L96 34 L100 44 L150 46 L158 40 L196 40 L202 48 L202 62 L160 62 L156 96 L138 96 L134 64 L96 64 L92 80 L76 80 L74 62 L30 62 Z"],
+    ["Sniper Rifle","M2 54 L60 50 L70 40 L84 40 L88 48 L150 48 L160 42 L218 42 L218 50 L162 52 L156 60 L120 60 L116 74 L104 74 L100 60 L66 60 L60 66 L2 64 Z"],
+    ["Boat","M18 66 L202 66 L186 92 L40 92 Z M78 66 L92 46 L150 46 L162 66 Z M196 58 L212 58 L212 84 L198 84 Z"],
+    ["Helicopter","M30 62 C30 44 52 34 82 34 C112 34 128 46 128 60 C128 74 110 82 82 82 C54 82 30 76 30 62 Z M126 52 L196 44 L200 52 L128 62 Z M192 30 L204 30 L200 52 L190 50 Z M10 26 L150 26 L150 31 L10 31 Z M74 31 L86 31 L86 36 L74 36 Z M44 96 L128 96 L128 100 L44 100 Z M60 82 L56 96 L64 96 L68 82 Z M104 82 L108 96 L116 96 L112 82 Z"]
+  ];
+  function wrapPreviewHTML(feat){
+    var figures = WRAP_SHAPES.map(function(s){
+      return '<figure class="wrap-cell"><svg viewBox="0 0 220 110" role="img" aria-label="' + esc(s[0]) + '">'
+        + '<path d="' + s[1] + '" fill="url(#wrapPat)" stroke="rgba(255,255,255,.35)" stroke-width="1.5"/></svg>'
+        + '<figcaption>' + esc(s[0]) + "</figcaption></figure>";
+    }).join("");
+    return '<h3>Wrap Preview</h3>'
+      + '<p class="note">Preview mock &mdash; the wrap pattern applied to sample shapes, like the in-game inventory preview. Not in-game renders.</p>'
+      + '<svg width="0" height="0" style="position:absolute"><defs>'
+      + '<pattern id="wrapPat" width="110" height="110" patternUnits="userSpaceOnUse">'
+      + '<image href="' + esc(feat) + '" width="110" height="110" preserveAspectRatio="xMidYMid slice"/>'
+      + "</pattern></defs></svg>"
+      + '<div class="wrap-grid">' + figures + "</div>";
+  }
+
+  var overlayEl = document.getElementById("detailOverlay");
+  var detailContentEl = document.getElementById("detailContent");
+  function detailHTML(rec){
+    var color = RARITY_COLORS[rec.rarityKey] || "#b1b1b1";
+    var html = '<div class="detail-head">'
+      + '<div class="detail-img" style="background:radial-gradient(circle at 50% 35%,' + color + '38,rgba(5,8,26,.6))">'
+      + (rec.img
+          ? '<img src="' + esc(rec.img) + '" alt="' + esc(rec.name) + '" onerror="this.parentNode.innerHTML=\'<span class=&quot;no-img&quot;>Image unavailable</span>\'">'
+          : '<span class="no-img">Image unavailable</span>')
+      + "</div>"
+      + '<div class="detail-info">'
+      + '<div class="detail-name">' + esc(rec.name) + "</div>"
+      + (rec.type ? '<div class="card-type">' + esc(rec.type) + "</div>" : "")
+      + (rec.rarityLabel ? '<span class="rarity" style="background:' + color + '">' + esc(rec.rarityLabel) + "</span>" : "")
+      + chipsHTML(rec.id, true, true)
+      + wishToggleHTML(rec.id)
+      + (rec.price != null
+          ? '<div class="price">' + (window.__vbuckIcon ? '<img src="' + esc(window.__vbuckIcon) + '" alt="V-Bucks">' : "")
+            + esc(rec.price.toLocaleString()) + " V-Bucks"
+            + (rec.was != null && rec.was !== rec.price ? '<span class="was">' + esc(rec.was.toLocaleString()) + "</span>" : "")
+            + "</div>"
+          : "")
+      + (rec.desc ? '<p class="detail-desc">' + esc(rec.desc) + "</p>" : "")
+      + '<div class="detail-meta">'
+      + (rec.set ? "<div><b>Set:</b> " + esc(rec.set) + "</div>" : "")
+      + (rec.intro ? "<div><b>Introduced:</b> " + esc(rec.intro.replace(/^Introduced in /i, "")) + "</div>" : "")
+      + (rec.added ? "<div><b>Added to the game:</b> " + esc(fmtDate(rec.added)) + "</div>" : "")
+      + "</div>"
+      + "</div></div>";
+    if (rec.v && rec.v.length){
+      html += "<h3>Editable Styles</h3>" + '<div class="styles-grid">'
+        + rec.v.map(function(s){
+            return '<div class="style-cell"><img src="' + esc(s.im) + '" alt="' + esc(s.n) + '" loading="lazy" onerror="this.style.visibility=\'hidden\'"><span>' + esc(s.n) + "</span></div>";
+          }).join("")
+        + "</div>";
+    }
+    if (rec.sv){
+      html += "<h3>Showcase</h3>"
+        + '<div class="video-wrap"><iframe src="https://www.youtube-nocookie.com/embed/' + esc(rec.sv)
+        + '" title="Showcase video" loading="lazy" allowfullscreen '
+        + 'allow="accelerometer; encrypted-media; picture-in-picture"></iframe></div>';
+    }
+    if (rec.typeKey === "wrap" && rec.feat){
+      html += wrapPreviewHTML(rec.feat);
+    }
+    return html;
+  }
+  function openDetail(rec){
+    if (!rec) return;
+    detailContentEl.innerHTML = detailHTML(rec);
+    overlayEl.hidden = false;
+    document.body.style.overflow = "hidden";
+  }
+  function openDetailById(id, fallback){
+    if (!id){ if (fallback) openDetail(fallback); return; }
+    ensureIndex().then(function(map){
+      openDetail(entryToRecord(map.get(id), fallback && Object.assign({ id: id }, fallback)));
+    }).catch(function(){ if (fallback) openDetail(fallback); });
+  }
+  function closeDetail(){
+    overlayEl.hidden = true;
+    detailContentEl.innerHTML = "";
+    document.body.style.overflow = "";
+  }
+  document.getElementById("detailClose").addEventListener("click", closeDetail);
+  overlayEl.addEventListener("click", function(e){ if (e.target === overlayEl) closeDetail(); });
+  overlayEl.addEventListener("click", function(e){ wishClick(e); });
+  var catLegendEl = document.getElementById("catLegend");
+  if (catLegendEl && window.matchMedia &&
+      window.matchMedia("(min-width: 700px)").matches){
+    catLegendEl.open = true;
+  }
+  document.addEventListener("keydown", function(e){ if (e.key === "Escape" && !overlayEl.hidden) closeDetail(); });
+
+  /* ---------- Wishlist page ---------- */
+  var contentEl = document.getElementById("content");
+  var metaEl = document.getElementById("resultsMeta");
+  var indexMap = null;
+  var shopIds = new Set();
+  var shopPrice = {};
+
+  function wishCardHTML(rec, inShopNow){
+    var color = RARITY_COLORS[rec.rarityKey] || "#b1b1b1";
+    var sp = shopPrice[rec.id];
+    return '<article class="card' + (inShopNow ? " in-shop" : "") + '" data-did="' + esc(rec.id) + '">'
+      + '<div class="card-img" style="background:radial-gradient(circle at 50% 35%,' + color + '38,rgba(5,8,26,.6))">'
+      + (rec.img
+          ? '<img src="' + esc(rec.img) + '" alt="' + esc(rec.name) + '" loading="lazy" onerror="this.parentNode.innerHTML=\'<span class=&quot;no-img&quot;>Image unavailable</span>\'">'
+          : '<span class="no-img">Image unavailable</span>')
+      + "</div>"
+      + '<div class="rarity-bar" style="background:' + color + '"></div>'
+      + '<div class="card-body">'
+      + (inShopNow ? '<span class="in-shop-tag">In shop today!</span>' : "")
+      + '<div class="card-name">' + esc(rec.name) + "</div>"
+      + (rec.type ? '<div class="card-type">' + esc(rec.type) + "</div>" : "")
+      + (rec.rarityLabel ? '<span class="rarity" style="background:' + color + '">' + esc(rec.rarityLabel) + "</span>" : "")
+      + chipsHTML(rec.id, true)
+      + (inShopNow && sp && sp.price != null
+          ? '<div class="price">'
+            + (window.__vbuckIcon ? '<img src="' + esc(window.__vbuckIcon) + '" alt="V-Bucks">' : "")
+            + esc(sp.price.toLocaleString())
+            + (sp.was != null && sp.was !== sp.price
+                ? '<span class="was">' + esc(sp.was.toLocaleString()) + "</span>" : "")
+            + "</div>"
+          : "")
+      + '<button type="button" class="wish-remove" data-remove="' + esc(rec.id) + '">Remove</button>'
+      + "</div></article>";
+  }
+
+  function renderWishlist(){
+    if (!indexMap) return;
+    var ids = wishIds();
+    if (!ids.length){
+      metaEl.textContent = "";
+      contentEl.innerHTML = '<div class="status">Your wishlist is empty.<br>' +
+        'Tap the \u2661 on any item across FortShop and it will wait for you here &mdash; ' +
+        'flagged the day it lands in the shop.</div>';
+      return;
+    }
+    var inShop = [], rest = [];
+    ids.forEach(function(id){
+      var e = indexMap.get(id);
+      if (!e) return;
+      (shopIds.has(id) ? inShop : rest).push(entryToRecord(e));
+    });
+    var total = 0;
+    inShop.forEach(function(rec){
+      if (shopPrice[rec.id] && shopPrice[rec.id].price != null){
+        total += shopPrice[rec.id].price;
+      }
+    });
+    metaEl.textContent = ids.length + (ids.length === 1 ? " saved item" : " saved items") +
+      (inShop.length
+        ? " \u00B7 " + inShop.length + " in the shop today \u00B7 " +
+          total.toLocaleString() + " V-Bucks to grab them"
+        : " \u00B7 none in today\u2019s shop");
+    var html = "";
+    if (inShop.length){
+      html += '<h2 class="group-title"><span class="g-bar" style="background:#37e0a0"></span>' +
+        'In shop today!<span class="g-count">' + inShop.length +
+        (inShop.length === 1 ? " item" : " items") + '</span></h2><div class="grid">';
+      inShop.forEach(function(rec){ html += wishCardHTML(rec, true); });
+      html += "</div>";
+    }
+    if (rest.length){
+      html += '<h2 class="group-title"><span class="g-bar" style="background:#2fb9ff"></span>' +
+        'Watching for<span class="g-count">' + rest.length +
+        (rest.length === 1 ? " item" : " items") + '</span></h2><div class="grid">';
+      rest.forEach(function(rec){ html += wishCardHTML(rec, false); });
+      html += "</div>";
+    }
+    html += '<div class="wish-actions">' +
+      '<button type="button" class="wish-toggle" id="wishClear">Clear wishlist</button></div>';
+    contentEl.innerHTML = html;
+  }
+
+  contentEl.addEventListener("click", function(e){
+    var t = e.target;
+    var rm = t && t.closest ? t.closest("[data-remove]") : null;
+    if (rm){
+      var rid = rm.getAttribute("data-remove");
+      wishSave(wishIds().filter(function(x){ return x !== rid; }));
+      updateWishNavBadge();
+      renderWishlist();
+      return;
+    }
+    if (t && t.closest && t.closest("#wishClear")){
+      wishSave([]);
+      updateWishNavBadge();
+      renderWishlist();
+      return;
+    }
+    if (wishClick(e)){ renderWishlist(); return; }
+    var card = t && t.closest ? t.closest("[data-did]") : null;
+    if (card) openDetailById(card.getAttribute("data-did"), null);
+  });
+
+  Promise.all([
+    loadSearchIndex(), loadBadges(),
+    fetch("https://fortnite-api.com/v2/shop").then(function(r){
+      if (!r.ok) throw new Error("API returned " + r.status);
+      return r.json();
+    }).catch(function(){ return null; })
+  ]).then(function(res){
+    indexMap = new Map();
+    (res[0].items || []).forEach(function(e){ indexMap.set(e.i, e); });
+    var json = res[2];
+    if (json && json.data){
+      window.__vbuckIcon = json.data.vbuckIcon || "";
+      (json.data.entries || []).forEach(function(entry){
+        [].concat(entry.brItems || [], entry.items || [], entry.instruments || [],
+                  entry.cars || [], entry.legoKits || [])
+          .forEach(function(it){
+            if (it && it.id){
+              shopIds.add(it.id);
+              if (!shopPrice[it.id]){
+                shopPrice[it.id] = { price: entry.finalPrice, was: entry.regularPrice };
+              }
+            }
+          });
+      });
+    }
+    noteShopIds(shopIds);
+    renderWishlist();
+  }).catch(function(err){
+    contentEl.innerHTML = '<div class="status error">Couldn&rsquo;t load your wishlist. ' +
+      'Please check your connection and refresh the page.</div>';
+  });
+
+})();
+</script>
+</body>
+</html>
