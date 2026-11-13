@@ -570,38 +570,70 @@
     return "";
   }
 
+  /* Display order follows Fortnite's own item-shop order: skins and other
+     high-demand gear first, vehicle items in the middle, Jam Tracks last. */
   var TYPE_PRIORITY = {
     outfit: 0,
     backpack: 1, backbling: 1,
     pickaxe: 2,
-    emote: 3,
-    glider: 4,
-    wrap: 5,
-    contrail: 6,
-    shoe: 7,
+    glider: 3,
+    contrail: 4,
+    emote: 5,
+    wrap: 6,
+    shoe: 7, shoes: 7,
     sidekick: 8, pet: 8, petcarrier: 8,
-    body: 9, skin: 9, wheel: 9, decal: 9,
-    bass: 10, guitar: 10, drum: 10, drums: 10, mic: 10, keytar: 10,
-    loadingscreen: 11,
-    spray: 12, emoji: 12,
-    banner: 13, toy: 13, aura: 13,
-    music: 90
+    body: 9, skin: 9, wheel: 9, wheels: 9, decal: 9, decals: 9,
+    boost: 9, trail: 9, trails: 9,
+    loadingscreen: 10,
+    spray: 11,
+    emoji: 12, emoticon: 12,
+    banner: 13,
+    toy: 14,
+    aura: 15,
+    music: 16, lobbymusic: 16,
+    bass: 17, guitar: 17, drum: 17, drums: 17, mic: 17, keytar: 17
   };
+  var UNKNOWN_TYPE_PRIORITY = 17.5;
+  var JAM_PRIORITY = 18;
   function typePriority(typeKey){
     var key = String(typeKey || "").toLowerCase();
     if (key === "jam" || key === "jamtrack" || key === "jam_track" ||
-        key === "track" || key === "tracks"){
-      return 100;
+        key === "jamtracks" || key === "track" || key === "tracks"){
+      return JAM_PRIORITY;
     }
     return Object.prototype.hasOwnProperty.call(TYPE_PRIORITY, key)
-      ? TYPE_PRIORITY[key] : 50;
+      ? TYPE_PRIORITY[key] : UNKNOWN_TYPE_PRIORITY;
   }
   function itemsTypePriority(items){
-    if (!items || !items.length) return 50;
+    if (!items || !items.length) return UNKNOWN_TYPE_PRIORITY;
     var priorities = items.map(function(item){
       return typePriority(item && item.type && item.type.value);
     });
     return Math.min.apply(null, priorities);
+  }
+  function cardPriority(card){
+    return card.typePriority != null
+      ? card.typePriority : typePriority(card.typeKey);
+  }
+  /* A section's rank is the best priority among its cards, with two hard
+     rules: a Jam Tracks section always renders last, and a section that is
+     mostly vehicle items sits in the middle vehicle band. */
+  function sectionRank(name, cards){
+    var best = Infinity, vehicleCount = 0, jamCount = 0;
+    cards.forEach(function(card){
+      var p = cardPriority(card);
+      if (p < best) best = p;
+      if (p === TYPE_PRIORITY.body) vehicleCount++;
+      if (p >= JAM_PRIORITY) jamCount++;
+    });
+    if (/jam\s*tracks?/i.test(name || "") ||
+        (cards.length && jamCount === cards.length)){
+      return 1000;
+    }
+    if (cards.length && vehicleCount * 2 >= cards.length){
+      return TYPE_PRIORITY.body;
+    }
+    return best === Infinity ? UNKNOWN_TYPE_PRIORITY : best;
   }
   function allEntryItems(entry){
     return [].concat(
@@ -621,7 +653,7 @@
         name: entry.bundle.name || "Bundle",
         type: "Bundle" + (bItems.length ? " · " + bItems.length + " items" : ""),
         typeKey: isJamBundle ? "jam" : "bundle",
-        typePriority: isJamBundle ? 100 : itemsTypePriority(allEntryItems(entry)),
+        typePriority: isJamBundle ? JAM_PRIORITY : itemsTypePriority(allEntryItems(entry)),
         rarity: "Bundle", rarityKey: "bundle",
         img: bImg, price: price, was: was
       };
@@ -633,7 +665,7 @@
         name: t.title || "Jam Track",
         type: "Jam Track" + (t.artist ? " · " + t.artist : ""),
         typeKey: "jam",
-        typePriority: 100,
+        typePriority: JAM_PRIORITY,
         rarity: "Jam Track", rarityKey: "jam",
         img: t.albumArt || "", price: price, was: was
       };
@@ -654,7 +686,7 @@
       name: (it.name || "Unknown item") + extra,
       type: (it.type && it.type.displayValue) || "",
       typeKey: (it.type && it.type.value) || "",
-      typePriority: typePriority(it.type && it.type.value),
+      typePriority: itemsTypePriority(allEntryItems(entry)),
       rarity: rarityObj.displayValue || "",
       rarityKey: (it.rarity && it.rarity.value) ||
                  (it.series && it.series.value) || "",
@@ -762,20 +794,43 @@
       if (!bySection[secName]){ bySection[secName] = []; order.push(secName); }
       bySection[secName].push(card);
     });
-    allSections = order.map(function(name){
+    allSections = order.map(function(name, sectionIndex){
       var sortedCards = bySection[name].map(function(card, originalIndex){
         return { card: card, originalIndex: originalIndex };
       }).sort(function(a, b){
-        var priorityA = a.card.typePriority != null
-          ? a.card.typePriority : typePriority(a.card.typeKey);
-        var priorityB = b.card.typePriority != null
-          ? b.card.typePriority : typePriority(b.card.typeKey);
-        return (priorityA - priorityB) || (a.originalIndex - b.originalIndex);
+        return (cardPriority(a.card) - cardPriority(b.card)) ||
+               (a.originalIndex - b.originalIndex);
       }).map(function(entry){
         return entry.card;
       });
-      return { name: name, cards: sortedCards };
+      return {
+        name: name, cards: sortedCards,
+        rank: sectionRank(name, sortedCards), sectionIndex: sectionIndex
+      };
+    }).sort(function(a, b){
+      return (a.rank - b.rank) || (a.sectionIndex - b.sectionIndex);
     });
+    /* Jam Tracks sit at the very bottom of the whole page: pull any stray
+       Jam Track cards out of mixed sections into the Jam Tracks section so
+       no Jam Track ever renders above a regular item. */
+    var jamSection = null, strayJamCards = [];
+    allSections.forEach(function(sec){
+      if (/jam\s*tracks?/i.test(sec.name)){ jamSection = sec; return; }
+      var kept = [];
+      sec.cards.forEach(function(card){
+        if (cardPriority(card) >= JAM_PRIORITY) strayJamCards.push(card);
+        else kept.push(card);
+      });
+      sec.cards = kept;
+    });
+    if (strayJamCards.length){
+      if (!jamSection){
+        jamSection = { name: "Jam Tracks", cards: [], rank: 1000, sectionIndex: order.length };
+        allSections.push(jamSection);
+      }
+      jamSection.cards = jamSection.cards.concat(strayJamCards);
+    }
+    allSections = allSections.filter(function(sec){ return sec.cards.length; });
     if (!allSections.length){
       shopEl.innerHTML = '<div class="status">The shop looks empty right now — check back after the daily reset.</div>';
       return;
