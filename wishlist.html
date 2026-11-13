@@ -187,6 +187,8 @@
     margin:0 auto;
   }
   footer .credit{margin-top:6px;font-size:12px}
+  footer .credit a{color:var(--accent-blue);text-decoration:none}
+  footer .credit a:hover{text-decoration:underline}
   /* Wishlist + declutter (shared component) */
   .wish-btn{
     position:absolute;
@@ -230,6 +232,19 @@
     background:rgba(0,0,0,.25);color:var(--text-dim);
   }
   .wish-remove:hover{color:#fff;border-color:#ff5c7a}
+  .set-complete{
+    margin-top:10px;
+    padding-top:9px;
+    border-top:1px solid var(--panel-border);
+    display:flex;flex-direction:column;gap:4px;
+  }
+  .set-complete-head{font-size:12.5px;font-weight:800;letter-spacing:.04em;color:#fff}
+  .set-complete-head .sc-total{color:var(--accent-blue)}
+  .sc-row{
+    display:flex;justify-content:space-between;gap:8px;
+    font-size:12.5px;color:var(--text-dim);line-height:1.35;
+  }
+  .sc-row .sc-price{color:#fff;font-weight:700;white-space:nowrap}
   .wish-actions{display:flex;justify-content:center;margin-top:26px}
   .nav-count{
     display:inline-block;
@@ -487,7 +502,9 @@
 
 <footer>
   <div>Unofficial fan project. Not affiliated with Epic Games.</div>
-  <div class="credit">Catalogue data from the public fortnite-api.com API.</div>
+  <div class="credit">Shop &amp; cosmetics data and item images: <a href="https://fortnite-api.com" target="_blank" rel="noopener">fortnite-api.com</a> (free public API) &middot; Shop appearance history (May&ndash;Nov 2026): public datamining record of the same API</div>
+  <div class="credit">Showcase videos: Gnejs Gaming (YouTube)</div>
+  <div class="credit">Fortnite and all item artwork &copy; Epic Games, Inc.</div>
 </footer>
 
 <div class="overlay" id="detailOverlay" hidden>
@@ -810,6 +827,58 @@
   var indexMap = null;
   var shopIds = new Set();
   var shopPrice = {};
+  /* Cheapest way to buy each shop item, per item id:
+     { set, name, price, offerId } — price is the finalPrice of the
+     cheapest entry that sells the item (a bundle entry's price is
+     shared by everything inside it). */
+  var shopMateInfo = {};
+  function buildShopMateInfo(entries){
+    shopMateInfo = {};
+    (entries || []).forEach(function(entry){
+      [].concat(entry.brItems || [], entry.items || [], entry.instruments || [],
+                entry.cars || [], entry.legoKits || [])
+        .forEach(function(it){
+          if (!it || !it.id || !it.set || !it.set.value) return;
+          var cur = shopMateInfo[it.id];
+          if (!cur || entry.finalPrice < cur.price){
+            shopMateInfo[it.id] = {
+              set: it.set.value, name: it.name || "",
+              price: entry.finalPrice, offerId: entry.offerId || it.id
+            };
+          }
+        });
+    });
+  }
+  /* "Complete the set today": the set-mates of this wishlisted item
+     that are in today's shop and not already on the wishlist, grouped
+     by the entry that sells them so a shared bundle is only priced
+     once. Quiet block; renders nothing when no mates are in the shop. */
+  function setCompleteHTML(rec){
+    if (!rec.set) return "";
+    var wished = {};
+    wishIds().forEach(function(x){ wished[x] = true; });
+    var byEntry = {}, order = [];
+    Object.keys(shopMateInfo).forEach(function(mid){
+      var m = shopMateInfo[mid];
+      if (m.set !== rec.set || mid === rec.id || wished[mid]) return;
+      if (!byEntry[m.offerId]){
+        byEntry[m.offerId] = { price: m.price, names: [] };
+        order.push(m.offerId);
+      }
+      byEntry[m.offerId].names.push(m.name);
+    });
+    if (!order.length) return "";
+    var total = 0;
+    var rows = order.map(function(key){
+      var g = byEntry[key];
+      total += g.price;
+      return '<div class="sc-row"><span>' + esc(g.names.join(" + ")) + '</span>' +
+        '<span class="sc-price">' + esc(g.price.toLocaleString()) + "</span></div>";
+    }).join("");
+    return '<div class="set-complete">' +
+      '<div class="set-complete-head">Complete the set today: <span class="sc-total">+' +
+      total.toLocaleString() + " V-Bucks</span></div>" + rows + "</div>";
+  }
 
   function wishCardHTML(rec, inShopNow){
     var color = RARITY_COLORS[rec.rarityKey] || "#b1b1b1";
@@ -835,6 +904,7 @@
                 ? '<span class="was">' + esc(sp.was.toLocaleString()) + "</span>" : "")
             + "</div>"
           : "")
+      + setCompleteHTML(rec)
       + '<button type="button" class="wish-remove" data-remove="' + esc(rec.id) + '">Remove</button>'
       + "</div></article>";
   }
@@ -919,6 +989,7 @@
     var json = res[2];
     if (json && json.data){
       window.__vbuckIcon = json.data.vbuckIcon || "";
+      buildShopMateInfo(json.data.entries);
       (json.data.entries || []).forEach(function(entry){
         [].concat(entry.brItems || [], entry.items || [], entry.instruments || [],
                   entry.cars || [], entry.legoKits || [])

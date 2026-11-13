@@ -187,6 +187,8 @@
     margin:0 auto;
   }
   footer .credit{margin-top:6px;font-size:12px}
+  footer .credit a{color:var(--accent-blue);text-decoration:none}
+  footer .credit a:hover{text-decoration:underline}
   /* Wishlist + declutter (shared component) */
   .wish-btn{
     position:absolute;
@@ -415,6 +417,23 @@
     margin:24px 4px 0;
     color:var(--accent-blue);
   }
+  .share-btn{
+    cursor:pointer;
+    font-family:inherit;
+    font-size:12px;
+    font-weight:800;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    padding:7px 14px;
+    border-radius:20px;
+    margin-left:14px;
+    vertical-align:3px;
+    border:1px solid var(--panel-border);
+    background:rgba(47,185,255,.15);
+    color:#fff;
+  }
+  .share-btn:hover{border-color:var(--accent-blue)}
+  .share-btn[disabled]{opacity:.6;cursor:wait}
 </style>
 </head>
 <body>
@@ -468,7 +487,9 @@
 
 <footer>
   <div>Unofficial fan project. Not affiliated with Epic Games.</div>
-  <div class="credit">Shop data from the public fortnite-api.com API. Prices in V-Bucks.</div>
+  <div class="credit">Shop &amp; cosmetics data and item images: <a href="https://fortnite-api.com" target="_blank" rel="noopener">fortnite-api.com</a> (free public API) &middot; Shop appearance history (May&ndash;Nov 2026): public datamining record of the same API</div>
+  <div class="credit">Showcase videos: Gnejs Gaming (YouTube)</div>
+  <div class="credit">Fortnite and all item artwork &copy; Epic Games, Inc.</div>
 </footer>
 
 <div class="overlay" id="detailOverlay" hidden>
@@ -992,7 +1013,8 @@
     var html = "";
     cardById = {};
     if (!q && topPicks.length){
-      html += '<h2 class="section-title">Today&rsquo;s Top Picks</h2><div class="grid">';
+      html += '<h2 class="section-title">Today&rsquo;s Top Picks' +
+        '<button type="button" class="share-btn" id="sharePicksBtn">Share today&rsquo;s picks</button></h2><div class="grid">';
       topPicks.forEach(function(c){ html += cardHTML(c); });
       html += "</div>";
     }
@@ -1028,6 +1050,8 @@
   }
 
   shopEl.addEventListener("click", function(e){
+    var shareBtn = e.target.closest ? e.target.closest("#sharePicksBtn") : null;
+    if (shareBtn){ shareTopPicks(shareBtn); return; }
     if (wishClick(e)) return;
     var card = e.target.closest ? e.target.closest("[data-did]") : null;
     if (!card) return;
@@ -1136,6 +1160,161 @@
     return picks;
   }
 
+  /* "Share today's picks": builds a 1080x1350 portrait PNG of exactly
+     the cards in topPicks (the same array render() displays) and
+     downloads it. Item photos load with crossOrigin="anonymous" — the
+     fortnite-api.com image CDN sends Access-Control-Allow-Origin: *,
+     so the canvas stays exportable. If a photo fails to load, or the
+     canvas ends up tainted anyway, that cell (or the whole image)
+     falls back to a rarity-coloured tile with the item's initial. */
+  var shopDateISO = "";
+  function loadShareImage(src, cors){
+    return new Promise(function(resolve){
+      if (!src){ resolve(null); return; }
+      var im = new Image();
+      if (cors) im.crossOrigin = "anonymous";
+      im.onload = function(){ resolve(im); };
+      im.onerror = function(){ resolve(null); };
+      im.src = src;
+    });
+  }
+  function drawCover(ctx, im, x, y, w, h){
+    var s = Math.max(w / im.naturalWidth, h / im.naturalHeight);
+    var sw = w / s, sh = h / s;
+    ctx.drawImage(im, (im.naturalWidth - sw) / 2, (im.naturalHeight - sh) / 2,
+                  sw, sh, x, y, w, h);
+  }
+  function fitLines(ctx, text, maxWidth, maxLines){
+    var words = String(text || "").split(/\s+/), lines = [], line = "";
+    words.forEach(function(w){
+      var t = line ? line + " " + w : w;
+      if (line && ctx.measureText(t).width > maxWidth){ lines.push(line); line = w; }
+      else line = t;
+    });
+    if (line) lines.push(line);
+    if (lines.length > maxLines){
+      lines = lines.slice(0, maxLines);
+      var last = lines[maxLines - 1];
+      while (last.length && ctx.measureText(last + "\u2026").width > maxWidth){
+        last = last.slice(0, -1);
+      }
+      lines[maxLines - 1] = last + "\u2026";
+    }
+    return lines;
+  }
+  function drawShareCanvas(photos, badge, usePhotos){
+    var W = 1080, H = 1350, PAD = 56, CW = W - PAD * 2;
+    var cv = document.createElement("canvas");
+    cv.width = W; cv.height = H;
+    var ctx = cv.getContext("2d");
+    ctx.fillStyle = "#0d1440";
+    ctx.fillRect(0, 0, W, H);
+    if (badge) ctx.drawImage(badge, PAD, 44, 92, 92);
+    ctx.fillStyle = "#ffffff";
+    ctx.font = "900 60px \"Segoe UI\", system-ui, sans-serif";
+    ctx.fillText("FORTSHOP", PAD + 116, 98);
+    ctx.fillStyle = "#2fb9ff";
+    ctx.font = "800 30px \"Segoe UI\", system-ui, sans-serif";
+    ctx.fillText("TODAY'S TOP PICKS", PAD + 118, 134);
+    ctx.fillStyle = "#a9b4d8";
+    ctx.font = "600 27px \"Segoe UI\", system-ui, sans-serif";
+    var dateLabel = shopDateISO
+      ? new Date(shopDateISO + "T00:00:00Z").toLocaleDateString("en-US", {
+          timeZone: "UTC", weekday: "long", month: "long", day: "numeric", year: "numeric"
+        })
+      : "";
+    ctx.fillText(dateLabel, PAD, 196);
+    ctx.fillStyle = "rgba(255,255,255,.14)";
+    ctx.fillRect(PAD, 216, CW, 3);
+    var rows = Math.ceil(topPicks.length / 2);
+    var gap = 16, gridTop = 240, gridH = 990;
+    var cellW = (CW - gap) / 2;
+    var cellH = Math.min(185, (gridH - (rows - 1) * gap) / rows);
+    topPicks.forEach(function(c, i){
+      var x = PAD + (i % 2) * (cellW + gap);
+      var y = gridTop + Math.floor(i / 2) * (cellH + gap);
+      var color = RARITY_COLORS[c.rarityKey] || "#b1b1b1";
+      ctx.fillStyle = "#1a2350";
+      ctx.fillRect(x, y, cellW, cellH);
+      ctx.strokeStyle = "rgba(255,255,255,.09)";
+      ctx.strokeRect(x + .5, y + .5, cellW - 1, cellH - 1);
+      var im = usePhotos ? photos[i] : null;
+      if (im){
+        drawCover(ctx, im, x + 14, y + 14, 128, 128);
+      } else {
+        ctx.fillStyle = "#141d47";
+        ctx.fillRect(x + 14, y + 14, 128, 128);
+        ctx.globalAlpha = .3;
+        ctx.fillStyle = color;
+        ctx.fillRect(x + 14, y + 14, 128, 128);
+        ctx.globalAlpha = 1;
+        ctx.fillStyle = "#ffffff";
+        ctx.font = "900 62px \"Segoe UI\", system-ui, sans-serif";
+        ctx.textAlign = "center";
+        ctx.fillText((c.name || "?").charAt(0).toUpperCase(), x + 78, y + 96);
+        ctx.textAlign = "left";
+      }
+      var tx = x + 160;
+      ctx.fillStyle = "#ffffff";
+      ctx.font = "700 29px \"Segoe UI\", system-ui, sans-serif";
+      fitLines(ctx, c.name, cellW - 176, 2).forEach(function(ln, li){
+        ctx.fillText(ln, tx, y + 54 + li * 36);
+      });
+      ctx.fillStyle = "#a9b4d8";
+      ctx.font = "600 21px \"Segoe UI\", system-ui, sans-serif";
+      ctx.fillText(String(c.rarity || "").toUpperCase(), tx, y + 128);
+      ctx.fillStyle = "#ffffff";
+      ctx.font = "800 30px \"Segoe UI\", system-ui, sans-serif";
+      ctx.fillText((c.price != null ? c.price.toLocaleString() : "") + " V-Bucks", tx, y + 164);
+      ctx.fillStyle = color;
+      ctx.fillRect(x, y + cellH - 6, cellW, 6);
+    });
+    ctx.fillStyle = "#a9b4d8";
+    ctx.font = "25px \"Segoe UI\", system-ui, sans-serif";
+    ctx.fillText("Unofficial fan project. Not affiliated with Epic Games.", PAD, 1280);
+    ctx.fillStyle = "#2fb9ff";
+    ctx.font = "800 27px \"Segoe UI\", system-ui, sans-serif";
+    ctx.fillText("sportstalk24.com", PAD, 1316);
+    if (usePhotos){
+      try { ctx.getImageData(0, 0, 1, 1); }
+      catch (e) { return null; } /* tainted: caller redraws without photos */
+    }
+    return cv;
+  }
+  function shareTopPicks(btn){
+    if (!topPicks.length || btn.disabled) return;
+    var label = btn.textContent;
+    btn.disabled = true;
+    btn.textContent = "Building image\u2026";
+    function done(){
+      btn.disabled = false;
+      btn.textContent = label;
+    }
+    var jobs = topPicks.map(function(c){ return loadShareImage(c.img, true); });
+    jobs.push(loadShareImage("assets/favicon.svg", false));
+    Promise.all(jobs).then(function(imgs){
+      var badge = imgs[imgs.length - 1];
+      var photos = imgs.slice(0, topPicks.length);
+      var cv = drawShareCanvas(photos, badge, true);
+      if (!cv) cv = drawShareCanvas(photos, badge, false);
+      if (!cv || !cv.toBlob){ done(); return; }
+      cv.toBlob(function(blob){
+        if (blob){
+          var url = URL.createObjectURL(blob);
+          var a = document.createElement("a");
+          a.href = url;
+          a.download = "fortshop-top-picks-" +
+            (shopDateISO || new Date().toISOString().slice(0, 10)) + ".png";
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+          setTimeout(function(){ URL.revokeObjectURL(url); }, 4000);
+        }
+        done();
+      }, "image/png");
+    }).catch(function(){ done(); });
+  }
+
   Promise.all([
     fetch(API_URL).then(function(r){
       if (!r.ok) throw new Error("API returned " + r.status);
@@ -1146,6 +1325,7 @@
     var json = res[0];
     var data = json.data || {};
     window.__vbuckIcon = data.vbuckIcon || "";
+    shopDateISO = (data.date || "").slice(0, 10);
     if (data.date){
       var d = new Date(data.date);
       dateEl.textContent = "Today's shop · " + d.toLocaleDateString(undefined, {
