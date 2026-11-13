@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://sportstalk24.com/sitemap.xml
