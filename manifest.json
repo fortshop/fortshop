@@ -1,0 +1,24 @@
+{
+  "name": "FortShop \u2014 Fortnite Item Shop Tracker",
+  "short_name": "Fort",
+  "description": "Today's Fortnite item shop, rarest skins, return predictions, and a wishlist with shop alerts.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#0d1440",
+  "theme_color": "#0b2a6b",
+  "icons": [
+    {
+      "src": "assets/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

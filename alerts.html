@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- ===== SEO & SITE URLS · DOMAIN SWAP: every sportstalk24.com URL for this page
+     lives in the block below (title / meta / canonical / Open Graph / JSON-LD),
+     plus sitemap.xml and robots.txt — one find-and-replace when FortShop moves
+     to its official domain. ===== -->
+<title>Fortnite Shop Alerts — When Your Wishlist Skins Return | FortShop</title>
+<meta name="description" content="FortShop Alerts checks your Fortnite wishlist against today's item shop and each skin's expected return date, so you can see at a glance which saved skins are in the shop now and which are due back within days.">
+<meta name="keywords" content="fortnite shop alerts, fortnite skin alerts, when is a fortnite skin coming back, fortnite wishlist alerts, fortnite item shop notifications, fortnite remind me">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://sportstalk24.com/alerts.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="FortShop">
+<meta property="og:title" content="Fortnite Shop Alerts — When Your Wishlist Skins Return | FortShop">
+<meta property="og:description" content="See which of your wishlisted Fortnite skins are in today's item shop and which are expected back within 7 days.">
+<meta property="og:url" content="https://sportstalk24.com/alerts.html">
+<meta property="og:image" content="https://sportstalk24.com/assets/favicon.svg">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Fortnite Shop Alerts — When Your Wishlist Skins Return | FortShop">
+<meta name="twitter:description" content="See which of your wishlisted Fortnite skins are in today's item shop and which are expected back within 7 days.">
+<meta name="twitter:image" content="https://sportstalk24.com/assets/favicon.svg">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"Fortnite Shop Alerts","url":"https://sportstalk24.com/alerts.html","isPartOf":{"@type":"WebSite","name":"FortShop","url":"https://sportstalk24.com/"}}</script>
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+<meta name="theme-color" content="#0b2a6b">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<style>
+  :root{
+    --bg-deep:#0d1440;
+    --bg-mid:#182263;
+    --panel:#1a2350;
+    --panel-border:rgba(255,255,255,.09);
+    --accent-blue:#2fb9ff;
+    --accent-purple:#9d4dff;
+    --text:#ffffff;
+    --text-dim:#a9b4d8;
+    --font-body:"Segoe UI",system-ui,-apple-system,Arial,sans-serif;
+    --font-display:"Segoe UI",system-ui,-apple-system,Arial,sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{
+    font-family:var(--font-body);
+    color:var(--text);
+    min-height:100vh;
+    background:linear-gradient(180deg,#0b2a6b 0%,var(--bg-mid) 48%,var(--bg-deep) 100%);
+    background-attachment:fixed;
+  }
+  header{text-align:center;padding:44px 16px 8px}
+  .logo{
+    font-family:var(--font-display);
+    font-size:52px;
+    font-weight:900;
+    letter-spacing:.35em;
+    text-indent:.35em;
+    text-transform:uppercase;
+    color:#fff;
+  }
+  .tagline{
+    margin-top:6px;
+    font-size:14px;
+    font-weight:700;
+    letter-spacing:.3em;
+    text-indent:.3em;
+    text-transform:uppercase;
+    color:var(--text-dim);
+  }
+  nav{
+    display:flex;
+    justify-content:center;
+    gap:10px;
+    flex-wrap:wrap;
+    padding:20px 16px 0;
+  }
+  nav a{
+    color:var(--text-dim);
+    text-decoration:none;
+    font-size:13px;
+    font-weight:700;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    padding:7px 16px;
+    border:1px solid var(--panel-border);
+    border-radius:20px;
+  }
+  nav a:hover{color:#fff;border-color:var(--accent-blue)}
+  nav a.active{color:#fff;border-color:var(--accent-blue);background:rgba(47,185,255,.15)}
+  .categories{
+    max-width:1200px;
+    margin:22px auto 0;
+    padding:12px 18px;
+    width:calc(100% - 32px);
+    background:rgba(8,12,38,.55);
+    border:1px solid var(--panel-border);
+    border-radius:12px;
+  }
+  .categories-title{
+    font-size:12px;
+    font-weight:800;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    color:#fff;
+  }
+  .cat{display:inline-flex;align-items:center;gap:8px}
+  .cat-def{font-size:12.5px;color:var(--text-dim);line-height:1.4}
+  .badge{
+    display:inline-block;
+    font-size:10.5px;
+    font-weight:800;
+    letter-spacing:.05em;
+    text-transform:uppercase;
+    padding:3px 9px;
+    border-radius:20px;
+    white-space:nowrap;
+  }
+  .b-crowned{background:#f2c230;color:#241a00}
+  .b-hot{background:#ff6a3d;color:#2b0e02}
+  .b-debut{background:#2ad4c4;color:#04302b}
+  .b-overdue{background:#9d4dff;color:#ffffff}
+  .b-back{background:#2fb9ff;color:#06283d}
+  .badges{display:flex;flex-wrap:wrap;gap:5px}
+  .page-title{
+    text-align:center;
+    font-size:26px;
+    font-weight:800;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    margin-top:28px;
+    padding:0 16px;
+  }
+  .intro{
+    max-width:760px;
+    margin:12px auto 0;
+    padding:0 16px;
+    text-align:center;
+    font-size:14px;
+    line-height:1.55;
+    color:var(--text-dim);
+  }
+  .intro strong{color:#fff}
+  main{max-width:1200px;margin:0 auto;padding:10px 16px 30px}
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
+    gap:16px;
+    margin-top:18px;
+  }
+  .card{
+    background:var(--panel);
+    border:1px solid var(--panel-border);
+    border-radius:12px;
+    overflow:hidden;
+    display:flex;
+    flex-direction:column;
+    transition:transform .12s ease,border-color .12s ease;
+    position:relative;
+  }
+  .card:hover{transform:translateY(-3px);border-color:var(--accent-blue)}
+  .card[data-did]{cursor:pointer}
+  .card-img{
+    aspect-ratio:1/1;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .card-img img{width:100%;height:100%;object-fit:cover;display:block}
+  .card-img .no-img{color:var(--text-dim);font-size:13px;padding:12px;text-align:center}
+  .rarity-bar{height:5px;flex:none}
+  .card-body{padding:12px 14px 14px;display:flex;flex-direction:column;gap:6px;flex:1}
+  .card-name{font-size:15px;font-weight:700;line-height:1.25}
+  .card-type{font-size:12px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.08em}
+  .rarity{
+    align-self:flex-start;
+    font-size:11px;
+    font-weight:700;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    padding:3px 9px;
+    border-radius:20px;
+    color:#0b0b18;
+    background:#b1b1b1;
+  }
+  .price{
+    margin-top:auto;
+    display:flex;
+    align-items:center;
+    gap:6px;
+    font-size:16px;
+    font-weight:800;
+  }
+  .price img{width:18px;height:18px}
+  .price .was{font-size:13px;font-weight:600;color:var(--text-dim);text-decoration:line-through}
+  .status{
+    text-align:center;
+    padding:60px 16px;
+    font-size:17px;
+    color:var(--text-dim);
+  }
+  .status.error{color:#ff8f8f}
+  footer{
+    text-align:center;
+    padding:26px 16px 34px;
+    font-size:13px;
+    color:var(--text-dim);
+    border-top:1px solid rgba(255,255,255,.08);
+    max-width:1200px;
+    margin:0 auto;
+  }
+  footer .credit{margin-top:6px;font-size:12px}
+  footer .credit a{color:var(--accent-blue);text-decoration:none}
+  footer .credit a:hover{text-decoration:underline}
+  /* Wishlist + declutter (shared component) */
+  .wish-btn{
+    position:absolute;
+    top:8px;right:8px;
+    z-index:3;
+    width:34px;height:34px;
+    border-radius:50%;
+    border:1px solid var(--panel-border);
+    background:rgba(5,8,26,.72);
+    color:#fff;
+    font-size:17px;
+    line-height:1;
+    cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+    font-family:inherit;
+    padding:0;
+  }
+  .wish-btn:hover{border-color:var(--accent-blue)}
+  .wish-btn.on{background:#ff5c7a;border-color:#ff5c7a;color:#fff}
+  .card.in-shop{border-color:#37e0a0}
+  .in-shop-tag{
+    align-self:flex-start;
+    font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;
+    padding:3px 9px;border-radius:20px;background:#37e0a0;color:#05281b;
+  }
+  .wish-toggle{
+    align-self:flex-start;
+    cursor:pointer;
+    font-family:inherit;
+    font-size:13.5px;font-weight:700;
+    padding:9px 18px;border-radius:24px;
+    border:1px solid var(--panel-border);
+    background:rgba(0,0,0,.25);color:#fff;
+  }
+  .wish-toggle:hover{border-color:var(--accent-blue)}
+  .wish-toggle.on{background:#ff5c7a;border-color:#ff5c7a}
+  .wish-remove{
+    margin-top:8px;align-self:flex-start;cursor:pointer;font-family:inherit;
+    font-size:12px;font-weight:700;letter-spacing:.05em;
+    padding:6px 13px;border-radius:16px;border:1px solid var(--panel-border);
+    background:rgba(0,0,0,.25);color:var(--text-dim);
+  }
+  .wish-remove:hover{color:#fff;border-color:#ff5c7a}
+  .set-complete{
+    margin-top:10px;
+    padding-top:9px;
+    border-top:1px solid var(--panel-border);
+    display:flex;flex-direction:column;gap:4px;
+  }
+  .set-complete-head{font-size:12.5px;font-weight:800;letter-spacing:.04em;color:#fff}
+  .set-complete-head .sc-total{color:var(--accent-blue)}
+  .sc-row{
+    display:flex;justify-content:space-between;gap:8px;
+    font-size:12.5px;color:var(--text-dim);line-height:1.35;
+  }
+  .sc-row .sc-price{color:#fff;font-weight:700;white-space:nowrap}
+  .wish-actions{display:flex;justify-content:center;margin-top:26px}
+  .nav-count{
+    display:inline-block;
+    min-width:19px;
+    padding:1px 5px;
+    margin-left:6px;
+    border-radius:10px;
+    background:#37e0a0;color:#05281b;
+    font-size:11px;font-weight:800;
+    text-align:center;
+    vertical-align:2px;
+  }
+  .nav-count[hidden]{display:none}
+  .categories summary{
+    display:flex;align-items:center;justify-content:center;gap:10px;
+    cursor:pointer;list-style:none;
+  }
+  .categories summary::-webkit-details-marker{display:none}
+  .categories .cat-hint{
+    font-size:11.5px;font-weight:700;color:var(--accent-blue);
+    letter-spacing:.05em;text-transform:uppercase;
+  }
+  .cat-list{
+    display:flex;flex-wrap:wrap;gap:8px 22px;
+    align-items:center;justify-content:center;margin-top:10px;
+  }
+  /* Item detail overlay (shared component) */
+  .overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(4,6,24,.78);
+    display:flex;
+    align-items:flex-start;
+    justify-content:center;
+    padding:28px 12px;
+    overflow-y:auto;
+    z-index:50;
+  }
+  .overlay[hidden]{display:none}
+  .detail{
+    position:relative;
+    width:min(880px,96vw);
+    background:#141d47;
+    border:1px solid var(--panel-border);
+    border-radius:16px;
+    padding:26px;
+  }
+  .detail-close{
+    position:absolute;
+    top:10px;right:14px;
+    background:none;border:none;
+    color:var(--text-dim);
+    font-size:30px;line-height:1;
+    cursor:pointer;
+    padding:4px 8px;
+  }
+  .detail-close:hover{color:#fff}
+  .detail-head{display:flex;gap:22px;flex-wrap:wrap}
+  .detail-img{
+    width:250px;height:250px;flex:none;
+    border-radius:12px;
+    overflow:hidden;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .detail-img img{width:100%;height:100%;object-fit:cover;display:block}
+  .detail-img .no-img{color:var(--text-dim);font-size:13px}
+  .detail-info{flex:1;min-width:240px;display:flex;flex-direction:column;gap:9px}
+  .detail-name{
+    font-size:27px;font-weight:900;
+    letter-spacing:.04em;text-transform:uppercase;line-height:1.15;
+  }
+  .detail-desc{font-size:14.5px;line-height:1.55;color:#dbe2f7}
+  .detail-meta{font-size:13.5px;color:var(--text-dim);line-height:1.7}
+  .detail-meta b{color:#fff;font-weight:700}
+  .detail h3{
+    font-size:15px;font-weight:800;
+    letter-spacing:.12em;text-transform:uppercase;
+    margin:26px 0 6px;
+  }
+  .detail .note{font-size:12.5px;color:var(--text-dim);margin-bottom:10px}
+  .styles-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(96px,1fr));
+    gap:12px;
+  }
+  .style-cell{text-align:center}
+  .style-cell img{
+    width:100%;aspect-ratio:1/1;object-fit:cover;
+    border-radius:10px;border:1px solid var(--panel-border);
+    background:rgba(255,255,255,.05);display:block;
+  }
+  .style-cell span{display:block;margin-top:5px;font-size:12px;color:var(--text-dim);line-height:1.3}
+  .video-wrap{
+    position:relative;
+    aspect-ratio:16/9;
+    border-radius:12px;
+    overflow:hidden;
+    border:1px solid var(--panel-border);
+    background:#000;
+  }
+  .video-wrap iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+  .wrap-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(150px,1fr));
+    gap:12px;
+  }
+  .wrap-cell{
+    background:rgba(255,255,255,.05);
+    border:1px solid var(--panel-border);
+    border-radius:10px;
+    padding:10px 8px 8px;
+    text-align:center;
+  }
+  .wrap-cell svg{width:100%;height:auto;display:block}
+  .wrap-cell figcaption{margin-top:6px;font-size:12px;color:var(--text-dim);letter-spacing:.06em;text-transform:uppercase;font-weight:700}
+  @media (max-width:520px){
+    .logo{font-size:38px}
+    .grid{grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px}
+    .detail{padding:20px 16px}
+    .detail-img{width:100%;height:auto;aspect-ratio:1/1}
+  }
+  /* Search page extras */
+  .toolbar{display:flex;justify-content:center;padding:22px 16px 4px}
+  .toolbar input{
+    width:min(420px,90vw);
+    padding:11px 16px;
+    border-radius:24px;
+    border:1px solid var(--panel-border);
+    background:rgba(0,0,0,.30);
+    color:#fff;
+    font-size:15px;
+    outline:none;
+    font-family:inherit;
+  }
+  .toolbar input:focus{border-color:var(--accent-blue)}
+  .toolbar input::placeholder{color:var(--text-dim)}
+  .filters{
+    max-width:1000px;
+    margin:16px auto 0;
+    padding:0 16px;
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+    align-items:center;
+  }
+  .chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+  .chip{
+    cursor:pointer;
+    font-family:inherit;
+    font-size:12px;
+    font-weight:700;
+    letter-spacing:.07em;
+    text-transform:uppercase;
+    padding:6px 13px;
+    border-radius:20px;
+    border:1px solid var(--panel-border);
+    background:rgba(0,0,0,.25);
+    color:var(--text-dim);
+  }
+  .chip:hover{color:#fff}
+  .chip .dot{
+    display:inline-block;
+    width:9px;height:9px;
+    border-radius:50%;
+    margin-right:6px;
+    vertical-align:1px;
+  }
+  .chip.active{color:#0b0b18;border-color:transparent}
+  .chip.active .dot{background:#0b0b18 !important}
+  .type-row{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-size:13px;
+    color:var(--text-dim);
+    text-transform:uppercase;
+    letter-spacing:.08em;
+    font-weight:700;
+  }
+  .type-row select{
+    font-family:inherit;
+    font-size:14px;
+    padding:8px 12px;
+    border-radius:20px;
+    border:1px solid var(--panel-border);
+    background:rgba(0,0,0,.30);
+    color:#fff;
+    outline:none;
+  }
+  .type-row select:focus{border-color:var(--accent-blue)}
+  .results-meta{
+    text-align:center;
+    margin-top:20px;
+    font-size:13px;
+    color:var(--text-dim);
+    letter-spacing:.04em;
+  }
+  .group-title{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin:28px 4px 0;
+    font-size:17px;
+    font-weight:800;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    color:#fff;
+  }
+  .group-title .g-bar{width:26px;height:5px;border-radius:3px;flex:none}
+  .group-title .g-count{
+    font-size:12.5px;
+    font-weight:700;
+    letter-spacing:.06em;
+    color:var(--text-dim);
+  }
+</style>
+
+<style>
+/* ===== FortShop mobile pass · Nov 13, 2026: tap targets, 2-up grid,
+   sticky bar, no iOS input zoom, no horizontal overflow ===== */
+html,body{overflow-x:hidden}
+img{max-width:100%}
+nav a{min-height:44px;display:inline-flex;align-items:center}
+.wish-toggle{min-height:44px}
+.chip{min-height:44px;display:inline-flex;align-items:center}
+@media (max-width:920px){
+  select,input{font-size:16px}
+}
+@media (max-width:520px){
+  .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .card{min-width:0}
+  .card-name{overflow-wrap:break-word}
+  .wish-btn{width:44px;height:44px;font-size:19px}
+  .cat{display:flex;margin-top:8px}
+}
+nav{position:sticky;top:0;z-index:55;background:rgba(8,12,38,.94);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">Fort</div>
+  <div class="tagline">Fortnite Item Shop</div>
+</header>
+<nav>
+  <a href="index.html">Today&rsquo;s Shop</a>
+  <a href="rarest.html">Rarest</a>
+  <a href="predictions.html">Predictions</a>
+  <a href="search.html">Search</a>
+  <a href="wishlist.html">Wishlist<span class="nav-count" id="wishCount" hidden></span></a>
+  <a href="alerts.html" class="active">Alerts</a>
+</nav>
+
+<h1 class="page-title">Shop Alerts</h1>
+<p class="intro">Your wishlist, checked against the shop. Everything below is worked out on this device each time you open the page &mdash; no account, no sign-up.</p>
+<div class="alert-note" id="alertNote"><strong>How alerts work:</strong> add skins to your wishlist with the &hearts; button anywhere on FortShop, then check here. Items in today&rsquo;s shop appear first, then wishlist items whose expected return date falls within the next 7 days. Expected dates are estimates from tracked shop history<span id="histWindow"></span> &mdash; Epic does not announce returns in advance. Email and text alerts aren&rsquo;t live yet; for now, this page is your alert board.</div>
+
+<div id="alertsRoot">
+  <p class="note" id="loadingNote">Checking your wishlist against today&rsquo;s shop&hellip;</p>
+</div>
+
+<footer>
+  <div>Unofficial fan project. Not affiliated with Epic Games.</div>
+  <div class="credit">Shop &amp; cosmetics data and item images: <a href="https://fortnite-api.com" target="_blank" rel="noopener">fortnite-api.com</a> (free public API) &middot; Shop appearance history (May&ndash;Nov 2026): public datamining record of the same API</div>
+  <div class="credit">Showcase videos: Gnejs Gaming (YouTube)</div>
+  <div class="credit">Fortnite and all item artwork &copy; Epic Games, Inc.</div>
+  <div class="credit">FortShop Alerts compares your on-device Fortnite wishlist with today&rsquo;s item shop and each item&rsquo;s expected return estimate.</div>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+  function esc(s){
+    return String(s == null ? "" : s)
+      .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")
+      .replace(/"/g,"&quot;").replace(/'/g,"&#39;");
+  }
+  function fetchData(name){
+    return fetch("./data/" + name).then(function(r){
+      if (!r.ok) throw new Error("Data returned " + r.status);
+      return r.json();
+    }).catch(function(){
+      return fetch("../data/" + name).then(function(r){
+        if (!r.ok) throw new Error("Data returned " + r.status);
+        return r.json();
+      });
+    });
+  }
+  var SEARCH_INDEX_PARTS = ["search-index.json", "search-index-b.json", "search-index-c.json"];
+  function loadSearchIndex(){
+    return Promise.all(SEARCH_INDEX_PARTS.map(function(n){ return fetchData(n); }))
+      .then(function(parts){
+        var items = [];
+        parts.forEach(function(p){ items = items.concat(p.items || []); });
+        return items;
+      });
+  }
+  var WISH_KEY = "fortshop-wishlist";
+  function wishIds(){
+    try {
+      var v = JSON.parse(localStorage.getItem(WISH_KEY) || "[]");
+      return Array.isArray(v) ? v : [];
+    } catch (e) { return []; }
+  }
+  function wishSave(ids){
+    try { localStorage.setItem(WISH_KEY, JSON.stringify(ids)); } catch (e) {}
+  }
+  function fmtDate(iso){
+    if (!iso) return "";
+    var d = new Date(iso + "T00:00:00Z");
+    return d.toLocaleDateString("en-US", { timeZone:"UTC", year:"numeric", month:"long", day:"numeric" });
+  }
+  function todayISO(){
+    return new Date().toISOString().slice(0, 10);
+  }
+  function addDays(iso, n){
+    var d = new Date(iso + "T00:00:00Z");
+    d.setUTCDate(d.getUTCDate() + n);
+    return d.toISOString().slice(0, 10);
+  }
+  /* Live shop: id -> {price, bundle} so in-shop wishlist items show a price. */
+  function loadShop(){
+    return fetch("https://fortnite-api.com/v2/shop").then(function(r){
+      if (!r.ok) throw new Error("API returned " + r.status);
+      return r.json();
+    }).then(function(json){
+      var map = {};
+      ((json.data && json.data.entries) || []).forEach(function(entry){
+        var items = [].concat(entry.brItems || [], entry.items || [],
+                               entry.instruments || [], entry.cars || []);
+        var price = entry.finalPrice != null ? entry.finalPrice : entry.regularPrice;
+        items.forEach(function(it){
+          if (it && it.id && map[it.id] == null){
+            map[it.id] = { price: price, bundle: items.length > 1 };
+          }
+        });
+      });
+      return map;
+    }).catch(function(){ return {}; });
+  }
+
+  var root = document.getElementById("alertsRoot");
+  var ids = wishIds();
+
+  function updateWishNavBadge(inShop){
+    var el = document.getElementById("wishCount");
+    if (!el) return;
+    el.textContent = inShop;
+    el.hidden = !inShop;
+  }
+
+  if (!ids.length){
+    root.innerHTML = '<p class="note">Your wishlist is empty, so there&rsquo;s nothing to alert you about yet. ' +
+      'Head to <a href="search.html" style="color:var(--accent-blue)">Search</a> or ' +
+      '<a href="index.html" style="color:var(--accent-blue)">Today&rsquo;s Shop</a> and tap the &hearts; on any skin to start your list.</p>';
+    updateWishNavBadge(0);
+    return;
+  }
+
+  Promise.all([
+    loadSearchIndex().catch(function(){ return []; }),
+    fetchData("returns.json").catch(function(){ return null; }),
+    loadShop()
+  ]).then(function(res){
+    var items = res[0], returnsDoc = res[1], shopMap = res[2];
+    var byId = {};
+    items.forEach(function(it){ byId[it.i] = it; });
+    var rets = (returnsDoc && returnsDoc.items) || {};
+    if (returnsDoc && returnsDoc.historyWindow){
+      document.getElementById("histWindow").textContent =
+        " (tracked " + returnsDoc.historyWindow + ")";
+    }
+    var today = todayISO(), soonLimit = addDays(today, 7);
+    var inShop = [], soon = [], waiting = [];
+    ids.forEach(function(id){
+      var it = byId[id];
+      if (!it) return; /* wishlist id no longer in the catalog */
+      var rec = rets[id] || null;
+      var row = { it: it, rec: rec, shop: shopMap[id] || null };
+      if (row.shop) inShop.push(row);
+      else if (rec && rec.expected && rec.expected <= soonLimit) soon.push(row);
+      else waiting.push(row);
+    });
+    function byExpected(a, b){
+      var ea = a.rec && a.rec.expected ? a.rec.expected : "9999";
+      var eb = b.rec && b.rec.expected ? b.rec.expected : "9999";
+      return ea < eb ? -1 : ea > eb ? 1 : 0;
+    }
+    soon.sort(byExpected); waiting.sort(byExpected);
+    inShop.sort(function(a, b){ return (a.it.n || "").localeCompare(b.it.n || ""); });
+
+    function cardHTML(row){
+      var it = row.it, rec = row.rec;
+      var img = it.img ? '<img class="card-img" loading="lazy" alt="' + esc(it.n) + '" src="' + esc(it.img) + '">' :
+                         '<div class="card-img no-img"></div>';
+      var price = "";
+      if (row.shop && row.shop.price != null){
+        price = '<div class="price"><span class="vbuck"></span>' + esc(row.shop.price) +
+                (row.shop.bundle ? ' <span class="bundle-tag">Bundle</span>' : "") + "</div>";
+      }
+      var seen = "";
+      if (row.shop){
+        seen = '<div class="seen-line"><span class="in-shop-tag">In shop today!</span></div>';
+      } else if (rec){
+        seen = '<div class="seen-line">Last seen ' + fmtDate(rec.lastSeen) +
+               '<br><span class="exp">Expected ~' + fmtDate(rec.expected) + "</span> (estimate)</div>";
+      } else {
+        seen = '<div class="seen-line">No shop appearance in tracked records</div>';
+      }
+      return '<div class="card">' + img +
+        '<div class="card-body">' +
+          '<div class="card-name">' + esc(it.n) + "</div>" +
+          '<div class="card-type">' + esc(it.td || it.t || "") +
+            (it.rd ? ' &middot; ' + esc(it.rd) : "") + "</div>" +
+          price + seen +
+          '<button type="button" class="wish-toggle on" data-remove="' + esc(it.i) + '">&hearts; On your wishlist</button>' +
+        "</div></div>";
+    }
+    function section(title, rows){
+      if (!rows.length) return "";
+      return '<h2 class="group-title">' + esc(title) + " (" + rows.length + ")</h2>" +
+             '<div class="grid">' + rows.map(cardHTML).join("") + "</div>";
+    }
+    var html = section("In the shop right now", inShop) +
+               section("Expected within 7 days", soon) +
+               section("Still waiting", waiting);
+    root.innerHTML = html || '<p class="note">Nothing to show yet &mdash; your wishlist items could not be matched to the catalog.</p>';
+    updateWishNavBadge(inShop.length);
+
+    root.addEventListener("click", function(e){
+      var btn = e.target && e.target.closest ? e.target.closest("[data-remove]") : null;
+      if (!btn) return;
+      var id = btn.getAttribute("data-remove");
+      wishSave(wishIds().filter(function(x){ return x !== id; }));
+      location.reload();
+    });
+  });
+})();
+</script>
+</body>
+</html>
